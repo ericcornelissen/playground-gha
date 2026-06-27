@@ -35,6 +35,7 @@ jobs:
       - name: Determine branch
         id: pr
         env:
+          GH_TOKEN: ${{ steps.automation-token.outputs.token }}
           PR_NUMBER: ${{ github.event.issue.number }}
         run: |
           BRANCH=$(gh pr view "${PR_NUMBER}" --json headRefName --jq '.headRefName')
