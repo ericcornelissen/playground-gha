@@ -6,8 +6,10 @@ on:
 
 jobs:
   add-to-changelog:
+    name: Add specific commit
     if: |
       github.event.issue.pull_request &&
+      github.event.comment.user.login == 'ericcornelissen' &&
       startsWith(github.event.comment.body, '/changelog ')
     runs-on: ubuntu-latest
     steps:
@@ -16,6 +18,7 @@ jobs:
         with:
           fetch-depth: 0 # To fetch all commits
           persist-credentials: false
+          ref: refs/pull/${{ github.event.issue.number }}/head
       - name: Create token to push commit
         uses: actions/create-github-app-token@1b10c78c7865c340bc4f6099eb2f838309f1e8c3 # v3.1.1
         id: automation-token
