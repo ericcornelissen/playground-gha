@@ -9,11 +9,13 @@ permissions: read-all
 jobs:
   add-to-changelog:
     name: Add specific commit
+    runs-on: ubuntu-24.04
+    permissions:
+      contents: write # To push a commit
     if: |
       github.event.issue.pull_request &&
       github.event.comment.user.login == 'ericcornelissen' &&
       startsWith(github.event.comment.body, '/changelog ')
-    runs-on: ubuntu-latest
     steps:
       - name: Checkout repository
         uses: actions/checkout@9c091bb21b7c1c1d1991bb908d89e4e9dddfe3e0 # v7.0.0
