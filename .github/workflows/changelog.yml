@@ -26,15 +26,22 @@ jobs:
           client-id: ${{ secrets.AUTOMATION_ID }}
           private-key: ${{ secrets.AUTOMATION_PRIVATE_KEY }}
       - name: Parse comment
-        id: parsed
+        id: comment
         env:
           COMMENT: ${{ github.event.comment.body }}
         run: |
           COMMIT=$(echo "${COMMENT}" | awk '{print $2}' | cut -c1-7)
           echo "commit=${COMMIT}" >>"${GITHUB_OUTPUT}"
+      - name: Determine branch
+        id: pr
+        env:
+          PR_NUMBER: ${{ github.event.issue.number }}
+        run: |
+          BRANCH=$(gh pr view "${PR_NUMBER}" --json headRefName --jq '.headRefName')
+          echo "branch=${BRANCH}" >>"${GITHUB_OUTPUT}"
       - name: Update the CHANGELOG.md
         env:
-          COMMIT: ${{ steps.parsed.outputs.commit }}
+          COMMIT: ${{ steps.comment.outputs.commit }}
         run: |
           DESCRIPTION=$(git show "${COMMIT}" --format='%s' --no-patch)
           LINE=$(echo "- (\`${COMMIT}\`) ${DESCRIPTION}.")
@@ -42,9 +49,9 @@ jobs:
           }' CHANGELOG.md
       - name: Create commit
         env:
+          BRANCH: ${{ steps.pr.outputs.branch }}
           GH_TOKEN: ${{ steps.automation-token.outputs.token }}
           REPOSITORY: ${{ github.repository }}
-          UPDATE_TYPE: ${{ github.event.inputs.update_type }}
         run: |
           git remote set-url 'origin' "https://x-access-token:${GH_TOKEN}@github.com/${REPOSITORY}"
 
@@ -53,4 +60,4 @@ jobs:
 
           git add 'CHANGELOG.md'
           git commit --message 'Update the CHANGELOG.md'
-          git push 'origin' 'HEAD'
+          git push 'origin' "HEAD:${BRANCH}"
