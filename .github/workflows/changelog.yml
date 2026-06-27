@@ -4,6 +4,8 @@ on:
     types:
       - created
 
+permissions: read-all
+
 jobs:
   add-to-changelog:
     name: Add specific commit
