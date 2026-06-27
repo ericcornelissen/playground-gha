@@ -1,0 +1,53 @@
+on:
+  issue_comment:
+    types:
+      - created
+
+jobs:
+  add-to-changelog:
+    if: |
+      github.event.issue.pull_request &&
+      startsWith(github.event.comment.body, '/changelog ')
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@9c091bb21b7c1c1d1991bb908d89e4e9dddfe3e0 # v7.0.0
+        with:
+          fetch-depth: 0 # To fetch all commits
+          persist-credentials: false
+      - name: Create token to create Pull Request
+        uses: actions/create-github-app-token@1b10c78c7865c340bc4f6099eb2f838309f1e8c3 # v3.1.1
+        id: automation-token
+        with:
+          client-id: ${{ secrets.AUTOMATION_ID }}
+          private-key: ${{ secrets.AUTOMATION_PRIVATE_KEY }}
+      - name: Parse Comment
+        id: parsed
+        env:
+          COMMENT: ${{ github.event.comment.body }}
+        run: |
+          COMMIT=$(echo "${COMMENT}" | awk '{print $2}' | cut -c1-7)
+          echo 'commit=${COMMIT}' >>"${GITHUB_OUTPUT}"
+      - name: Update the CHANGELOG.md
+        id: parsed
+        env:
+          COMMIT: ${{ steps.parsed.outputs.commit }}
+        run: |
+          DESCRIPTION=$(git show "${COMMIT}" --format='%s' --no-patch)
+          LINE=$(echo "- (\`${COMMIT}\`) ${DESCRIPTION}.")
+          sed -i '/## \[Unreleased\]/{n; a '"$LINE"'
+          }' CHANGELOG.md
+      - name: Create Commit
+        env:
+          GH_TOKEN: ${{ steps.automation-token.outputs.token }}
+          REPOSITORY: ${{ github.repository }}
+          UPDATE_TYPE: ${{ github.event.inputs.update_type }}
+        run: |
+          git remote set-url 'origin' "https://x-access-token:${GH_TOKEN}@github.com/${REPOSITORY}"
+
+          git config user.name 'github-actions[bot]'
+          git config user.email 'github-actions[bot]@users.noreply.github.com'
+
+          git add 'CHANGELOG.md'
+          git commit --message 'Update the CHANGELOG.md'
+          git push 'origin' 'HEAD'
