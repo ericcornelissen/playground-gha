@@ -10,6 +10,7 @@ Versioning].
 
 ## [Unreleased]
 
+- (`8b4eb91`) Version bump.
 - _No changes yet_
 
 ## [0.4.60] - 2026-06-28
