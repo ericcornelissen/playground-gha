@@ -75,6 +75,7 @@ jobs:
         id: automation-token
         with:
           client-id: ${{ secrets.AUTOMATION_ID }}
+          permission-actions: true # To trigger another workflow
           private-key: ${{ secrets.AUTOMATION_PRIVATE_KEY }}
       - name: Trigger new release if main is clean
         if: ${{ failure() }}
