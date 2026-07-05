@@ -1,0 +1,495 @@
+# ADES100
+! exec ades ades100.yml
+! stdout 'Ok'
+stdout 'ADES100'
+! stderr .
+
+# ADES101
+! exec ades ades101.yml
+! stdout 'Ok'
+stdout 'ADES101'
+! stderr .
+
+# ADES102
+! exec ades ades102-1.yml
+! stdout 'Ok'
+stdout 'ADES102'
+! stderr .
+
+! exec ades ades102-2.yml
+! stdout 'Ok'
+stdout 'ADES102'
+! stderr .
+
+# ADES103
+! exec ades ades103-1.yml
+! stdout 'Ok'
+stdout 'ADES103'
+! stderr .
+
+! exec ades ades103-2.yml
+! stdout 'Ok'
+stdout 'ADES103'
+! stderr .
+
+# ADES104
+! exec ades ades104.yml
+! stdout 'Ok'
+stdout 'ADES104'
+! stderr .
+
+# ADES105
+! exec ades ades105.yml
+! stdout 'Ok'
+stdout 'ADES105'
+! stderr .
+
+# ADES106
+! exec ades ades106.yml
+! stdout 'Ok'
+stdout 'ADES106'
+! stderr .
+
+# ADES107
+! exec ades ades107.yml
+! stdout 'Ok'
+stdout 'ADES107'
+! stderr .
+
+# ADES108
+! exec ades ades108.yml
+! stdout 'Ok'
+stdout 'ADES108'
+! stderr .
+
+# ADES109
+! exec ades ades109.yml
+! stdout 'Ok'
+stdout 'ADES109'
+! stderr .
+
+# ADES110
+! exec ades ades110.yml
+! stdout 'Ok'
+stdout 'ADES110'
+! stderr .
+
+# ADES111
+! exec ades ades111.yml
+! stdout 'Ok'
+stdout 'ADES111'
+! stderr .
+
+# ADES112
+! exec ades ades112.yml
+! stdout 'Ok'
+stdout 'ADES112'
+! stderr .
+
+# ADES113
+! exec ades ades113.yml
+! stdout 'Ok'
+stdout 'ADES113'
+! stderr .
+
+# ADES114
+! exec ades ades114.yml
+! stdout 'Ok'
+stdout 'ADES114'
+! stderr .
+
+# ADES115
+! exec ades ades115.yml
+! stdout 'Ok'
+stdout 'ADES115'
+! stderr .
+
+# ADES116
+! exec ades ades116.yml
+! stdout 'Ok'
+stdout 'ADES116'
+! stderr .
+
+# ADES200
+! exec ades ades200.yml
+! stdout 'Ok'
+stdout 'ADES200'
+! stderr .
+
+# ADES201
+! exec ades ades201.yml
+! stdout 'Ok'
+stdout 'ADES201'
+! stderr .
+
+# ADES202
+! exec ades ades202.yml
+! stdout 'Ok'
+stdout 'ADES202'
+! stderr .
+
+# ADES203
+! exec ades ades203.yml
+! stdout 'Ok'
+stdout 'ADES203'
+! stderr .
+
+# ADES204
+! exec ades ades204.yml
+! stdout 'Ok'
+stdout 'ADES204'
+! stderr .
+
+# ADES205
+! exec ades ades205.yml
+! stdout 'Ok'
+stdout 'ADES205'
+! stderr .
+
+# ADES206
+! exec ades ades206.yml
+! stdout 'Ok'
+stdout 'ADES206'
+! stderr .
+
+# ADES207
+! exec ades ades207.yml
+! stdout 'Ok'
+stdout 'ADES207'
+! stderr .
+
+# ADES300
+! exec ades ades300.yml
+! stdout 'Ok'
+stdout 'ADES300'
+! stderr .
+
+
+-- ades100.yml --
+name: Example workflow with a ADES100 violation
+on: [push]
+
+jobs:
+  example:
+    runs-on: ubuntu-latest
+    steps:
+    - run: |
+        echo 'Hello ${{ inputs.name }}'
+-- ades101.yml --
+name: Example workflow with a ADES101 violation
+on: [push]
+
+jobs:
+  example:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/github-script@v6
+      with:
+        script: console.log('Hello ${{ inputs.name }}')
+-- ades102-1.yml --
+name: Example workflow with a ADES102 violation
+on: [push]
+
+jobs:
+  example:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: roots/issue-closer-action@v1
+      with:
+        issue-close-message: Closing ${{ github.event.issue.title }}
+-- ades102-2.yml --
+name: Example workflow with a ADES102 violation
+on: [push]
+
+jobs:
+  example:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: roots/issue-closer@v1
+      with:
+        issue-close-message: Closing ${{ github.event.issue.title }}
+-- ades103-1.yml --
+name: Example workflow with a ADES103 violation
+on: [push]
+
+jobs:
+  example:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: roots/issue-closer-action@v1
+      with:
+        pr-close-message: Closing ${{ github.event.issue.title }}
+-- ades103-2.yml --
+name: Example workflow with a ADES103 violation
+on: [push]
+
+jobs:
+  example:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: roots/issue-closer@v1
+      with:
+        pr-close-message: Closing ${{ github.event.issue.title }}
+-- ades104.yml --
+name: Example workflow with a ADES104 violation
+on: [push]
+
+jobs:
+  example:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: sergeysova/jq-action@v2
+      with:
+        cmd: jq .version ${{ github.event.inputs.file }} -r
+-- ades105.yml --
+name: Example workflow with a ADES105 violation
+on: [push]
+
+jobs:
+  example:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: addnab/docker-run-action@v3
+      with:
+        image: ubuntu:latest
+        run: |
+          echo 'Hello ${{ env.name }}'
+-- ades106.yml --
+name: Example workflow with a ADES106 violation
+on: [push]
+
+jobs:
+  example:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: cardinalby/js-eval-action@v1
+      with:
+        expression: 'Hello ${{ env.name }}'
+-- ades107.yml --
+name: Example workflow with a ADES107 violation
+on: [push]
+
+jobs:
+  example:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: 8398a7/action-slack@v3.18.0
+      with:
+        custom_payload: |
+          { attachments: [{ color: '${{ inputs.color }}' }] }
+-- ades108.yml --
+name: Example workflow with a ADES108 violation
+on: [push]
+
+jobs:
+  example:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: appleboy/ssh-action@v1
+      with:
+        script: echo 'Hello ${{ env.name }}'
+-- ades109.yml --
+name: Example workflow with a ADES109 violation
+on: [push]
+
+jobs:
+  example:
+    runs-on: ubuntu-latest
+    steps:
+    - name: Example step
+      uses: jannekem/run-python-script-action@v1
+      with:
+        script: print("Hello ${{ inputs.name }}")
+-- ades110.yml --
+name: Example workflow with a ADES110 violation
+on: [push]
+
+jobs:
+  example:
+    runs-on: ubuntu-latest
+    steps:
+    - name: Example step
+      uses: Amadevus/pwsh-script@v2
+      with:
+        script: |
+          Write-Output 'Hello ${{ inputs.name }}'
+-- ades111.yml --
+name: Example workflow with a ADES111 violation
+on: [push]
+
+jobs:
+  example:
+    runs-on: ubuntu-latest
+    steps:
+    - name: Example step
+      uses: mikefarah/yq@master
+      with:
+        cmd: yq -i '${{ inputs.query }}' 'config.yml'
+-- ades112.yml --
+name: Example workflow with a ADES112 violation
+on: [push]
+
+jobs:
+  example:
+    runs-on: ubuntu-latest
+    steps:
+    - name: Example step
+      uses: devorbitus/yq-action-output@v1.1
+      with:
+        cmd: yq eval '${{ inputs.query }}' 'config.yml'
+-- ades113.yml --
+name: Example workflow with a ADES113 violation
+on: [push]
+
+jobs:
+  example:
+    runs-on: ubuntu-latest
+    steps:
+    - name: Example step
+      uses: azure/powershell@v2.0.0
+      with:
+        azPSVersion: latest
+        inlineScript: |
+          Write-Output 'Hello ${{ inputs.name }}'
+-- ades114.yml --
+name: Example workflow with a ADES114 violation
+on: [push]
+
+jobs:
+  example:
+    runs-on: ubuntu-latest
+    steps:
+    - name: Example step
+      uses: gautamkrishnar/blog-post-workflow@1.9.4
+      with:
+        item_exec: |
+          post.includes('${{ inputs.substr }}')
+-- ades115.yml --
+name: Example workflow with a ADES115 violation
+on: [push]
+
+jobs:
+  example:
+    runs-on: ubuntu-latest
+    steps:
+    - name: Example step
+      uses: azure/cli@v2.2.0
+      with:
+        inlineScript: |
+          az vm create --name '${{ inputs.name }}'
+-- ades116.yml --
+name: Example workflow with a ADES116 violation
+on: [push]
+
+jobs:
+  example:
+    runs-on: ubuntu-latest
+    steps:
+    - name: Example step
+      uses: Skitionek/notify-microsoft-teams@v1.0.8
+      with:
+        overwrite: "{title: '${{ inputs.title }}'}"
+-- ades200.yml --
+name: Example workflow with a ADES200 violation
+on: [push]
+
+jobs:
+  example:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: ericcornelissen/git-tag-annotation-action@v1.0.0
+      with:
+        tag: ${{ inputs.tag }}
+-- ades201.yml --
+name: Example workflow with a ADES201 violation
+on: [push]
+
+jobs:
+  example:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: kceb/git-message-action@v1.1.0
+      with:
+        sha: ${{ inputs.sha }}
+-- ades202.yml --
+name: Example workflow with a ADES202 violation
+on: [push]
+
+jobs:
+  example:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: atlassian/gajira-create@v2.0.0
+      with:
+        summary: |
+          ${{ github.event.issue.title }}
+          description: |
+          ${{ github.event.issue.body }}
+-- ades203.yml --
+name: Example workflow with a ADES203 violation
+on: [push]
+
+jobs:
+  example:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: SonarSource/sonarqube-scan-action@v5.0.0
+      with:
+        args: ${{ inputs.args }}
+-- ades204.yml --
+name: Example workflow with a ADES204 violation
+on: [push]
+
+jobs:
+  example:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: lycheeverse/lychee@v2.0.1
+      with:
+        lycheeVersion: ${{ inputs.lycheeVersion }}
+-- ades205.yml --
+name: Example workflow with a ADES205 violation
+on: [push]
+
+jobs:
+  example:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: OZI-Project/publish@v1.13.5
+      with:
+        pull-request-body: ${{ inputs.pullRequestBody }}
+-- ades206.yml --
+name: Example workflow with a ADES206 violation
+on: [push]
+
+jobs:
+  example:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: fish-shop/syntax-check@v1.6.10
+      with:
+        pattern: ${{ inputs.pattern }}
+-- ades207.yml --
+name: Example workflow with a ADES207 violation
+on: [push]
+
+jobs:
+  example:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: aquasecurity/trivy-action@0.33.1
+      with:
+        output: "trivy-${{ github.event.pull_request.title }}.sarif"
+-- ades300.yml --
+name: Example workflow with a ADES300 violation
+on: [push]
+
+jobs:
+  example:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: anthropics/claude-code-action@v1
+      with:
+        allowed_non_write_users: '*'
+        prompt: |
+          Summarize the issue title ${{ github.event.issue.title }}

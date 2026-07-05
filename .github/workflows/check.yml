@@ -1,0 +1,333 @@
+name: Check
+on:
+  pull_request: ~
+  push:
+    branches:
+    - main
+
+permissions: read-all
+
+jobs:
+  build:
+    name: Build
+    runs-on: ubuntu-24.04
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v7.0.0
+      with:
+        persist-credentials: false
+    - name: Install Go
+      uses: actions/setup-go@924ae3a1cded613372ab5595356fb5720e22ba16 # v6.5.0
+      with:
+        go-version-file: go.mod
+    - name: Verify action checksums
+      uses: ./.github/actions/ghasum
+    - name: Build binary
+      run: go run tasks.go build
+    - name: Build all release binaries
+      run: go run tasks.go build-all
+  container:
+    name: Container
+    runs-on: ubuntu-24.04
+    strategy:
+      fail-fast: false
+      matrix:
+        engine:
+        - docker
+        - podman
+    needs:
+    - build
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@9c091bb21b7c1c1d1991bb908d89e4e9dddfe3e0 # v7.0.0
+      with:
+        persist-credentials: false
+    - name: Install Go
+      uses: actions/setup-go@924ae3a1cded613372ab5595356fb5720e22ba16 # v6.5.0
+      with:
+        go-version-file: go.mod
+    - name: Verify action checksums
+      uses: ./.github/actions/ghasum
+    - name: Build container with ${{ matrix.engine }}
+      run: go run tasks.go container
+      env:
+        CONTAINER_ENGINE: ${{ matrix.engine }}
+    - name: Test run container with ${{ matrix.engine }}
+      run: ${CONTAINER_ENGINE} run --rm ericornelissen/ades -help
+      env:
+        CONTAINER_ENGINE: ${{ matrix.engine }}
+  development-image:
+    name: Development image
+    runs-on: ubuntu-24.04
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@9c091bb21b7c1c1d1991bb908d89e4e9dddfe3e0 # v7.0.0
+      with:
+        persist-credentials: false
+    - name: Install Go
+      uses: actions/setup-go@924ae3a1cded613372ab5595356fb5720e22ba16 # v6.5.0
+      with:
+        go-version-file: go.mod
+    - name: Verify action checksums
+      uses: ./.github/actions/ghasum
+    - name: Build
+      run: go run tasks.go dev-img
+  format:
+    name: Format
+    runs-on: ubuntu-24.04
+    needs:
+    - build
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@9c091bb21b7c1c1d1991bb908d89e4e9dddfe3e0 # v7.0.0
+      with:
+        persist-credentials: false
+    - name: Install Go
+      uses: actions/setup-go@924ae3a1cded613372ab5595356fb5720e22ba16 # v6.5.0
+      with:
+        go-version-file: go.mod
+    - name: Verify action checksums
+      uses: ./.github/actions/ghasum
+    - name: Check source code formatting
+      run: go run tasks.go format-check
+  gha-release:
+    name: GitHub Actions Release Immutability
+    runs-on: ubuntu-24.04
+    if: github.event_name == 'pull_request' && startsWith(github.event.pull_request.head.ref || github.ref_name, 'renovate/')
+    permissions:
+      pull-requests: write # To comment on a Pull Request
+    steps:
+    - name: Parse
+      id: parse
+      shell: bash
+      env:
+        BODY: ${{ github.event.pull_request.body }}
+      run: |
+        ROW=$(echo "${BODY}" | grep -m1 '^| .* | action |') || true
+        REPO=$(echo "${ROW}" | cut -d'|' -f2 | sed -nE 's/.*\[([^]]+)\].*/\1/p')
+        OLD=$(echo "${ROW}" | cut -d'|' -f5 | awk -F'`' '{print $2}')
+        NEW=$(echo "${ROW}" | cut -d'|' -f5 | awk -F'`' '{print $4}')
+
+        {
+          echo "repo=$REPO"
+          echo "new=$NEW"
+          echo "old=$OLD"
+        } >>"$GITHUB_OUTPUT"
+    - name: Check
+      if: steps.parse.outputs.repo != ''
+      id: check
+      shell: bash
+      env:
+        GH_TOKEN: ${{ github.token }}
+        NEW: ${{ steps.parse.outputs.new }}
+        NUMBER: ${{ github.event.pull_request.number }}
+        OLD: ${{ steps.parse.outputs.old }}
+        THAT_REPO: ${{ steps.parse.outputs.repo }}
+        THIS_REPO: ${{ github.repository }}
+      run: |
+        set -euo pipefail
+
+        WAS_IMMUTABLE=$(gh release view "${OLD}" --repo "${THAT_REPO}" --json isImmutable | jq .isImmutable)
+        IS_IMMUTABLE=$(gh release view "${NEW}" --repo "${THAT_REPO}" --json isImmutable | jq .isImmutable)
+
+        echo "::debug::was ${WAS_IMMUTABLE}; is ${IS_IMMUTABLE}"
+        case "${WAS_IMMUTABLE};${IS_IMMUTABLE}" in
+        'true;true')
+          COMMENT=""
+          ;;
+        'false;false')
+          COMMENT="${OLD} was not an immutable release and ${NEW} still is not. :neutral_face:"
+          ;;
+        'true;false')
+          COMMENT="${OLD} was an immutable release but ${NEW} is not. :cry:"
+          ;;
+        'false;true')
+          COMMENT="${OLD} was not an immutable release but ${NEW} is! :smile:"
+          ;;
+        esac
+
+        exists=$(gh pr view "${NUMBER}" --repo "${THIS_REPO}" --json comments | jq --raw-output --arg comment "${COMMENT}" 'any(.comments[].body; . == $comment)')
+        if [[ ${exists} == 'true' ]]; then
+          echo '::debug::comment exists, not commenting again'
+          SKIP='true'
+        else
+          echo '::debug::comment does not yet exists'
+          SKIP='false'
+        fi
+
+        echo "comment=${COMMENT}" >>"$GITHUB_OUTPUT"
+        echo "skip=${SKIP}" >>"$GITHUB_OUTPUT"
+    - name: Comment
+      if: steps.parse.outputs.repo != '' && steps.check.outputs.comment != '' && steps.check.outputs.skip == 'false'
+      shell: bash
+      env:
+        GH_TOKEN: ${{ github.token }}
+        COMMENT: ${{ steps.check.outputs.comment }}
+        NUMBER: ${{ github.event.pull_request.number }}
+        THIS_REPO: ${{ github.repository }}
+      run: |
+        gh pr comment "${NUMBER}" --repo "${THIS_REPO}" --body "${COMMENT}"
+  reproducible:
+    name: Reproducible build
+    runs-on: ubuntu-24.04
+    needs:
+    - build
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@9c091bb21b7c1c1d1991bb908d89e4e9dddfe3e0 # v7.0.0
+      with:
+        persist-credentials: false
+    - name: Install Go
+      uses: actions/setup-go@924ae3a1cded613372ab5595356fb5720e22ba16 # v6.5.0
+      with:
+        go-version-file: go.mod
+    - name: Verify action checksums
+      uses: ./.github/actions/ghasum
+    - name: Check reproducibility
+      run: go run tasks.go reproducible
+  reproducible-container:
+    name: Reproducible container
+    runs-on: ubuntu-24.04
+    needs:
+    - container
+    - reproducible
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@9c091bb21b7c1c1d1991bb908d89e4e9dddfe3e0 # v7.0.0
+      with:
+        persist-credentials: false
+    - name: Install Go
+      uses: actions/setup-go@924ae3a1cded613372ab5595356fb5720e22ba16 # v6.5.0
+      with:
+        go-version-file: go.mod
+    - name: Verify action checksums
+      uses: ./.github/actions/ghasum
+    - name: Check reproducibility
+      run: go run tasks.go reproducible-container
+  reproducible-web:
+    name: Reproducible web
+    runs-on: ubuntu-24.04
+    needs:
+    - web
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@9c091bb21b7c1c1d1991bb908d89e4e9dddfe3e0 # v7.0.0
+      with:
+        persist-credentials: false
+    - name: Install Go
+      uses: actions/setup-go@924ae3a1cded613372ab5595356fb5720e22ba16 # v6.5.0
+      with:
+        go-version-file: go.mod
+    - name: Verify action checksums
+      uses: ./.github/actions/ghasum
+    - name: Check reproducibility
+      run: go run tasks.go web-reproducible
+  test-unit:
+    name: Unit test
+    runs-on: ubuntu-24.04
+    needs:
+    - build
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@9c091bb21b7c1c1d1991bb908d89e4e9dddfe3e0 # v7.0.0
+      with:
+        persist-credentials: false
+    - name: Install Go
+      uses: actions/setup-go@924ae3a1cded613372ab5595356fb5720e22ba16 # v6.5.0
+      with:
+        go-version-file: go.mod
+    - name: Verify action checksums
+      uses: ./.github/actions/ghasum
+    - name: Run tests
+      run: go run tasks.go test-randomized
+  test-dogfeed:
+    name: Dogfeed
+    runs-on: ubuntu-24.04
+    needs:
+    - test-unit
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@9c091bb21b7c1c1d1991bb908d89e4e9dddfe3e0 # v7.0.0
+      with:
+        persist-credentials: false
+    - name: Install Go
+      uses: actions/setup-go@924ae3a1cded613372ab5595356fb5720e22ba16 # v6.5.0
+      with:
+        go-version-file: go.mod
+    - name: Verify action checksums
+      uses: ./.github/actions/ghasum
+    - name: Run on this repository
+      run: go run tasks.go dogfeed
+  test-mutation:
+    name: Mutation test
+    runs-on: ubuntu-24.04
+    needs:
+    - test-unit
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@9c091bb21b7c1c1d1991bb908d89e4e9dddfe3e0 # v7.0.0
+      with:
+        persist-credentials: false
+    - name: Install Go
+      uses: actions/setup-go@924ae3a1cded613372ab5595356fb5720e22ba16 # v6.5.0
+      with:
+        go-version-file: go.mod
+    - name: Verify action checksums
+      uses: ./.github/actions/ghasum
+    - name: Run mutation tests
+      run: go run tasks.go test-mutation
+  test-web:
+    name: Web test
+    runs-on: ubuntu-24.04
+    needs:
+    - test-unit
+    - web
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@9c091bb21b7c1c1d1991bb908d89e4e9dddfe3e0 # v7.0.0
+      with:
+        persist-credentials: false
+    - name: Install Go
+      uses: actions/setup-go@924ae3a1cded613372ab5595356fb5720e22ba16 # v6.5.0
+      with:
+        go-version-file: go.mod
+    - name: Verify action checksums
+      uses: ./.github/actions/ghasum
+    - name: Run web tests
+      run: go run tasks.go web-test
+  vet:
+    name: Vet
+    runs-on: ubuntu-24.04
+    needs:
+    - build
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@9c091bb21b7c1c1d1991bb908d89e4e9dddfe3e0 # v7.0.0
+      with:
+        persist-credentials: false
+    - name: Install Go
+      uses: actions/setup-go@924ae3a1cded613372ab5595356fb5720e22ba16 # v6.5.0
+      with:
+        go-version-file: go.mod
+    - name: Verify action checksums
+      uses: ./.github/actions/ghasum
+    - name: Vet source code
+      run: go run tasks.go vet
+  web:
+    name: Web
+    runs-on: ubuntu-24.04
+    needs:
+    - build
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@9c091bb21b7c1c1d1991bb908d89e4e9dddfe3e0 # v7.0.0
+      with:
+        persist-credentials: false
+    - name: Install Go
+      uses: actions/setup-go@924ae3a1cded613372ab5595356fb5720e22ba16 # v6.5.0
+      with:
+        go-version-file: go.mod
+    - name: Verify action checksums
+      uses: ./.github/actions/ghasum
+    - name: Build web app
+      run: go run tasks.go web-build
