@@ -1,0 +1,21 @@
+# Help
+exec ades -help
+stdout 'Find dangerous uses of expressions in GitHub Action workflows and manifests.\n'
+! stderr .
+
+# Legal
+exec ades -legal
+cmp stdout $WORK/snapshots/legal-stdout.txt
+! stderr .
+
+# Version
+exec ades -version
+stdout 'v26.03.0'
+! stderr .
+
+
+-- snapshots/legal-stdout.txt --
+ades  Copyright (C) 2026  Eric Cornelissen
+This program comes with ABSOLUTELY NO WARRANTY; see the GPL v3.0 for details.
+This is free software, and you are welcome to redistribute it under certain
+conditions; see the GPL v3.0 for details.

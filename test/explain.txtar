@@ -1,0 +1,42 @@
+# Existing rule
+exec ades -explain 'ADES100'
+cmp stdout $WORK/snapshots/ades100-stdout.txt
+! stderr .
+
+# Lowercase rule ID
+exec ades -explain 'ades100'
+cmp stdout $WORK/snapshots/ades100-stdout.txt
+! stderr .
+
+# Non-existent rule
+! exec ades -explain 'foobar'
+! stdout .
+stderr 'Unknown rule "foobar"'
+
+
+-- snapshots/ades100-stdout.txt --
+ADES100 - Expression in 'run:' directive
+
+When an expression appears in a 'run:' directive you can avoid potential attacks by extracting the
+expression into an environment variable and using the environment variable instead.
+
+For example, given the workflow snippet:
+
+    - name: Example step
+      run: |
+        echo 'Hello ${{ inputs.name }}'
+
+it can be made safer by converting it into:
+
+    - name: Example step
+      env:
+        NAME: ${{ inputs.name }} # <- Assign the expression to an environment variable
+      run: |
+        echo "Hello $NAME"
+      #      ^      ^^^^^
+      #      |      | Replace the expression with the environment variable
+      #      |
+      #      | Note: the use of double quotes is required in this example (for interpolation)
+
+Note that the changes depend on the runner and shell being used. For example, on Windows (or when
+using 'shell: powershell') the environment variable must be accessed as '$Env:NAME'.

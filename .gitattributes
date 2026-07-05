@@ -1,0 +1,6 @@
+# Configuration file for git (https://git-scm.com/docs/gitattributes)
+
+* text=auto
+
+axe.min.js -diff
+gremlins.min.js -diff

@@ -1,0 +1,1959 @@
+# GHSA-7x29-qqmq-v6qc
+! exec ades 'GHSA-7x29-qqmq-v6qc/'
+! stdout 'Ok'
+! exec ades -conservative 'GHSA-7x29-qqmq-v6qc/'
+! stdout 'Ok'
+
+# GHSA-xj87-mqvh-88w2
+! exec ades 'GHSA-xj87-mqvh-88w2/'
+! stdout 'Ok'
+exec ades -conservative 'GHSA-xj87-mqvh-88w2/'
+stdout 'Ok'
+
+# GHSA-ghm2-rq8q-wrhc
+! exec ades 'GHSA-ghm2-rq8q-wrhc/'
+! stdout 'Ok'
+exec ades -conservative 'GHSA-ghm2-rq8q-wrhc/'
+stdout 'Ok'
+
+# GHSA-mcph-m25j-8j63
+! exec ades 'GHSA-mcph-m25j-8j63/'
+! stdout 'Ok'
+exec ades -conservative 'GHSA-mcph-m25j-8j63/'
+stdout 'Ok'
+
+# GHSA-8v8w-v8xg-79rf
+! exec ades 'GHSA-8v8w-v8xg-79rf/'
+! stdout 'Ok'
+! exec ades -conservative 'GHSA-8v8w-v8xg-79rf/'
+! stdout 'Ok'
+
+# GHSA-hw6r-g8gj-2987
+! exec ades 'GHSA-hw6r-g8gj-2987/'
+! stdout 'Ok'
+! exec ades -conservative 'GHSA-hw6r-g8gj-2987/'
+! stdout 'Ok'
+
+# GHSA-rg3q-prf8-qxmp
+! exec ades 'GHSA-rg3q-prf8-qxmp/'
+! stdout 'Ok'
+exec ades -conservative 'GHSA-rg3q-prf8-qxmp/'
+stdout 'Ok'
+
+# GHSA-6q4m-7476-932w
+! exec ades 'GHSA-6q4m-7476-932w/'
+! stdout 'Ok'
+! exec ades -conservative 'GHSA-6q4m-7476-932w/'
+! stdout 'Ok'
+
+# GHSA-2487-9f55-2vg9
+! exec ades 'GHSA-2487-9f55-2vg9/'
+! stdout 'Ok'
+! exec ades -conservative 'GHSA-2487-9f55-2vg9/'
+! stdout 'Ok'
+
+# GHSA-phf6-hm3h-x8qp
+! exec ades 'GHSA-phf6-hm3h-x8qp/'
+! stdout 'Ok'
+! exec ades -conservative 'GHSA-phf6-hm3h-x8qp/'
+! stdout 'Ok'
+
+# GHSA-65rg-554r-9j5x
+! exec ades 'GHSA-65rg-554r-9j5x/'
+! stdout 'Ok'
+exec ades -conservative 'GHSA-65rg-554r-9j5x/'
+stdout 'Ok'
+
+# GHSA-f79p-9c5r-xg88
+! exec ades 'GHSA-f79p-9c5r-xg88/'
+! stdout 'Ok'
+exec ades -conservative 'GHSA-f79p-9c5r-xg88/'
+stdout 'Ok'
+
+# GHSA-vxmw-7h4f-hqxh
+! exec ades 'GHSA-vxmw-7h4f-hqxh/'
+! stdout 'Ok'
+exec ades -conservative 'GHSA-vxmw-7h4f-hqxh/'
+stdout 'Ok'
+
+# GHSA-pwf7-47c3-mfhx
+! exec ades 'GHSA-pwf7-47c3-mfhx/'
+! stdout 'Ok'
+exec ades -conservative 'GHSA-pwf7-47c3-mfhx/'
+stdout 'Ok'
+
+# GHSA-f67f-hcr6-94mf
+! exec ades 'GHSA-f67f-hcr6-94mf/'
+! stdout 'Ok'
+! exec ades -conservative 'GHSA-f67f-hcr6-94mf/'
+! stdout 'Ok'
+
+# GHSA-r4fj-r33x-8v88
+! exec ades 'GHSA-r4fj-r33x-8v88/'
+! stdout 'Ok'
+! exec ades -conservative 'GHSA-r4fj-r33x-8v88/'
+! stdout 'Ok'
+
+# GHSA-6p2j-742g-835f
+! exec ades 'GHSA-6p2j-742g-835f/'
+! stdout 'Ok'
+! exec ades -conservative 'GHSA-6p2j-742g-835f/'
+! stdout 'Ok'
+
+# GHSA-c3xh-98xp-6qhf
+! exec ades 'GHSA-c3xh-98xp-6qhf/'
+! stdout 'Ok'
+! exec ades -conservative 'GHSA-c3xh-98xp-6qhf/'
+! stdout 'Ok'
+
+# Grafana Labs 2025-04-27
+! exec ades 'grafana-labs-2025-04-27/'
+! stdout 'Ok'
+! exec ades -conservative 'grafana-labs-2025-04-27/'
+! stdout 'Ok'
+
+# Cline 2026-02-24
+! exec ades 'cline-2026-02-24/'
+! stdout 'Ok'
+! exec ades -conservative 'cline-2026-02-24/'
+! stdout 'Ok'
+
+
+-- GHSA-7x29-qqmq-v6qc/action.yml --
+# Ultralytics YOLO 🚀, AGPL-3.0 License https://ultralytics.com/license
+
+name: "Ultralytics Actions"
+author: "Ultralytics"
+description: "Optimize code and docs with official Ultralytics Actions for syntax, spelling, and link checks."
+branding:
+  icon: "code"
+  color: "blue"
+inputs:
+  token:
+    description: "GitHub token"
+    required: true
+  python:
+    description: "Run Python formatting"
+    required: false
+    default: "false"
+  markdown:
+    description: "Run Markdown formatting (deprecated in favor of prettier)"
+    required: false
+    default: "false"
+  prettier:
+    description: "Run Prettier formatting for JavaScript, JSX, Angular, Vue, Flow, TypeScript, CSS, HTML, JSON, GraphQL, Markdown, YAML"
+    required: false
+    default: "false"
+  spelling:
+    description: "Run Spelling checks"
+    required: false
+    default: "false"
+  links:
+    description: "Run Broken Links checks"
+    required: false
+    default: "false"
+  summary:
+    description: "Run PR Summary"
+    required: false
+    default: "false"
+  openai_api_key:
+    description: "OpenAI API Key"
+    required: false
+  openai_azure_api_key:
+    description: "OpenAI Azure API Key"
+    required: false
+  openai_azure_endpoint:
+    description: "OpenAI Azure Endpoint"
+    required: false
+  openai_model:
+    description: "OpenAI Model"
+    required: false
+    default: "gpt-4o-2024-05-13"
+runs:
+  using: "composite"
+  steps:
+    - name: Print Action Information
+      run: |
+        echo "github.event_name: ${{ github.event_name }}"  # i.e. "pull_request"
+        echo "github.event.action: ${{ github.event.action }}"  # i.e. "opened" or "closed"
+        echo "github.repository: ${{ github.repository }}"
+        echo "github.event.pull_request.number: ${{ github.event.pull_request.number }}"
+        echo "github.event.pull_request.head.repo.full_name: ${{ github.event.pull_request.head.repo.full_name }}"
+        echo "github.actor: ${{ github.actor }}"
+        echo "github.event.pull_request.head.ref: ${{ github.event.pull_request.head.ref }}"
+        echo "github.ref: ${{ github.ref }}"
+        echo "github.head_ref: ${{ github.head_ref }}"
+        echo "github.base_ref: ${{ github.base_ref }}"
+      shell: bash
+
+    - name: Checkout Repository
+      if: github.event.action != 'closed'
+      uses: actions/checkout@v4
+      with:
+        repository: ${{ github.event.pull_request.head.repo.full_name || github.repository }}
+        token: ${{ inputs.token }}
+        ref: ${{ github.head_ref || github.ref }}
+        fetch-depth: 0
+
+    - name: Install Dependencies
+      # Note tomli required for codespell with pyproject.toml
+      if: github.event.action != 'closed'
+      run: |
+        pip install -q \
+        ruff docformatter codespell tomli
+        # mdformat-gfm mdformat-frontmatter mdformat-mkdocs
+      shell: bash
+
+    # Python formatting ------------------------------------------------------------------------------------------------
+    # Note on sorting Python imports https://stackoverflow.com/questions/77876253/sort-imports-alphabetically-with-ruff
+    - name: Run Python
+      if: inputs.python == 'true' && github.event.action != 'closed'
+      run: |
+        ruff format \
+        --line-length 120 \
+        . || true
+        ruff check \
+        --fix \
+        --extend-select I \
+        . || true
+        docformatter \
+        --wrap-summaries 120 \
+        --wrap-descriptions 120 \
+        --in-place \
+        --pre-summary-newline \
+        --close-quotes-on-newline \
+        --recursive \
+        .
+      shell: bash
+      continue-on-error: true
+
+    # Markdown formatting ----------------------------------------------------------------------------------------------
+    - name: Run Mdformat
+      if: inputs.markdown == 'true' && github.event.action != 'closed'
+      run: |
+        curl -s "https://raw.githubusercontent.com/ultralytics/actions/main/utils/update_markdown_code_blocks.py" | python -
+        # mdformat . --number --wrap no
+        # find . -name "*.md" ! -path "./docs/*" -exec mdformat --number --wrap no {} +
+      shell: bash
+      continue-on-error: true
+
+    # Prettier (JavaScript, JSX, Angular, Vue, Flow, TypeScript, CSS, HTML, JSON, GraphQL, Markdown, YAML) -------------
+    - name: Run Prettier
+      if: (inputs.prettier == 'true' || inputs.markdown == 'true') && github.event.action != 'closed'
+      run: |
+        npm install --global prettier
+        # npx prettier --write "**/*.{js,jsx,ts,tsx,css,less,scss,json,md,mdx,yml,yaml,html,vue,svelte}"
+        npx prettier --write "**/*.{yml,yaml}"
+        find . -name "*.md" ! -path "*/docs/*" -exec npx prettier --write {} +
+        find ./docs -name "*.md" ! -path "*/reference/*" -exec npx prettier --tab-width 4 --write {} + || true  # error if no /docs dir
+      shell: bash
+      continue-on-error: true
+
+    - name: Update unordered Markdown list indents to 4 spaces for MkDocs compatibility
+      if: (inputs.prettier == 'true' || inputs.markdown == 'true') && github.event.action != 'closed'
+      run: |
+        from pathlib import Path
+        for file in Path("./docs").rglob('*.md'):
+            content = file.read_text()
+            updated_content = content.replace("| - ","| -   ").replace('-   ', '- ').replace("** ","**   ").replace("*   ","* ")
+            file.write_text(updated_content)
+      shell: python
+      continue-on-error: true
+
+    # Spelling ---------------------------------------------------------------------------------------------------------
+    - name: Run Codespell
+      if: inputs.spelling == 'true' && github.event.action != 'closed'
+      run: |
+        codespell \
+          --write-changes \
+          --ignore-words-list "crate,nd,ned,strack,dota,ane,segway,fo,gool,winn,commend,bloc,nam,afterall" \
+          --skip "*.pt,*.pth,*.torchscript,*.onnx,*.tflite,*.pb,*.bin,*.param,*.mlmodel,*.engine,*.npy,*.data*,*.csv,*pnnx*,*venv*,*translat*,__pycache__*,*.ico,*.jpg,*.png,*.mp4,*.mov,/runs,/.git,./docs/??/*.md,./docs/mkdocs_??.yml"
+      shell: bash
+      continue-on-error: true
+
+    # Commit Changes ---------------------------------------------------------------------------------------------------
+    - name: Commit and Push Changes
+      if: github.event.action != 'closed'
+      run: |
+        git add .
+        git reset HEAD -- .github/workflows/  # workflow changes are not permitted with default token
+        if ! git diff --staged --quiet; then
+          git config --global user.name "UltralyticsAssistant"
+          git config --global user.email "web@ultralytics.com"
+          git commit -m "Auto-format by https://ultralytics.com/actions"
+          git push
+        else
+          echo "No changes to commit"
+        fi
+      shell: bash
+      continue-on-error: false
+
+    # PR Summary -------------------------------------------------------------------------------------------------------
+    - name: PR Summary
+      if: inputs.summary == 'true' && (github.event_name == 'pull_request' || github.event_name == 'pull_request_target') && github.event.action != 'synchronize'
+      env:
+        REPO_NAME: ${{ github.repository }}
+        PR_NUMBER: ${{ github.event.pull_request.number }}
+        GITHUB_TOKEN: ${{ inputs.token }}
+        OPENAI_API_KEY: ${{ inputs.openai_api_key }}
+        OPENAI_AZURE_API_KEY: ${{ inputs.openai_azure_api_key }}
+        OPENAI_AZURE_ENDPOINT: ${{ inputs.openai_azure_endpoint }}
+        OPENAI_MODEL: ${{ inputs.openai_model }}
+      # Note file must be run remotely using requests, not with "python utils/run_pr_summary.py"
+      run: |
+        pip install -q openai requests
+        curl -s "https://raw.githubusercontent.com/ultralytics/actions/main/utils/run_pr_summary.py" | python -
+      shell: bash
+      continue-on-error: true
+
+    # Broken links -----------------------------------------------------------------------------------------------------
+    - name: Broken Link Checker
+      if: inputs.links == 'true' && github.event.action != 'closed'
+      uses: lycheeverse/lychee-action@v1.10.0
+      with:
+        # Check all markdown and html files in repo. Ignores the following status codes to reduce false positives:
+        #   - 403(OpenVINO, "forbidden")
+        #   - 429(Instagram, "too many requests")
+        #   - 500(Zenodo, "cached")
+        #   - 502(Zenodo, "bad gateway")
+        #   - 999(LinkedIn, "unknown status code")
+        args: |
+          --scheme https
+          --timeout 60
+          --insecure
+          --accept 403,429,500,502,999
+          --exclude-all-private
+          --exclude "https?://(www\.)?(github\.com|linkedin\.com|twitter\.com|instagram\.com|kaggle\.com|fonts\.gstatic\.com|url\.com)"
+          "./**/*.md"
+          "./**/*.html"
+        token: ${{ inputs.token }}
+        output: ../lychee/results.md
+        fail: true
+      continue-on-error: false
+-- GHSA-xj87-mqvh-88w2/action.yml --
+name: 'fish-shop/syntax-check'
+description: 'A GitHub action for syntax checking fish shell files'
+branding:
+  icon: 'check'
+  color: 'green'
+inputs:
+  pattern:
+    description: 'File name pattern'
+    required: false
+    default: '**.fish'
+runs:
+  using: "composite"
+  steps:
+    - run: |
+        set -gx TERM xterm-256color
+
+        set -l passes 0
+        set -l failures 0
+
+        for file in ${{ inputs.pattern }}
+            echo -n "  "
+            set output (fish --no-execute $file 2>&1)
+            if test $status -ne 0
+                set_color red; and echo -n "✖"; and set_color normal
+                echo " $file"
+                for line in (string split $output)
+                    echo "      $line"
+                end
+                set failures (math $failures + 1)
+            else
+                set_color green; and echo -n "✔"; and set_color normal
+                echo " $file"
+                set passes (math $passes + 1)
+            end
+        end
+
+        set -l total (math $passes + $failures)
+
+        echo
+        set_color green; and echo -n "passed: $passes"; and set_color normal
+        echo -n "  "
+        set_color red; and echo -n "failed: $failures"; and set_color normal
+        echo "  of $total files"
+        echo
+
+        if test $failures -gt 0
+            set_color red; and echo "$failures of $total failed."
+        else
+            set_color green; and echo "All of $total files passed!"
+        end
+
+        exit $failures
+      shell: fish {0}
+-- GHSA-ghm2-rq8q-wrhc/.github/workflows/example.yml --
+jobs:
+  job:
+    steps:
+      - uses: actions/checkout@v2
+
+      - name: Change text file
+        run: |
+          echo "Modified" > new.txt
+
+      - name: Change file in directory
+        run: |
+          echo "Changed" > test_directory/new.txt
+
+      - name: Verify Changed files
+        uses: tj-actions/verify-changed-files@v16
+        id: verify-changed-files
+        with:
+          files: |
+             *.txt
+             test_directory
+             action.yml
+             **/*.{jpeg,py}
+             !*.sql
+
+      - name: Run step only when any of the above files change.
+        if: steps.verify-changed-files.outputs.files_changed == 'true'
+        run: |
+          echo "Changed files: ${{ steps.verify-changed-files.outputs.changed_files }}"
+        # Outputs: "Changed files: new.txt test_directory/new.txt"
+-- GHSA-mcph-m25j-8j63/.github/workflows/example.yml --
+name: CI
+
+on:
+  pull_request:
+    branches:
+      - main
+
+jobs:
+  # ------------------------------------------------------------------------------------------------------------------------------------------------
+  # Event `pull_request`: Compare the last commit of the main branch or last remote commit of the PR branch -> to the current commit of a PR branch.
+  # ------------------------------------------------------------------------------------------------------------------------------------------------
+  changed_files:
+    runs-on: ubuntu-latest  # windows-latest || macos-latest
+    name: Test changed-files
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0  # OR "2" -> To retrieve the preceding commit.
+
+      # Example 1
+      - name: Get changed files
+        id: changed-files
+        uses: tj-actions/changed-files@v40
+
+        # To compare changes between the current commit and the last pushed remote commit set `since_last_remote_commit: true`. e.g
+        # with:
+        #   since_last_remote_commit: true
+
+      - name: List all changed files
+        run: |
+          for file in ${{ steps.changed-files.outputs.all_changed_files }}; do
+            echo "$file was changed"
+          done
+
+      # Example 2
+      - name: Get all changed markdown files
+        id: changed-markdown-files
+        uses: tj-actions/changed-files@v40
+        with:
+          # Avoid using single or double quotes for multiline patterns
+          files: |
+             **.md
+
+      - name: List all changed files markdown files
+        if: steps.changed-markdown-files.outputs.any_changed == 'true'
+        run: |
+          for file in ${{ steps.changed-markdown-files.outputs.all_changed_files }}; do
+            echo "$file was changed"
+          done
+
+      # Example 3
+      - name: Get all test, doc and src files that have changed
+        id: changed-files-yaml
+        uses: tj-actions/changed-files@v40
+        with:
+          files_yaml: |
+            doc:
+              - '**.md'
+              - docs/**
+              - README.md
+            test:
+              - test/**
+              - '!test/**.md'
+            src:
+              - src/**
+          # Optionally set `files_yaml_from_source_file` to read the YAML from a file. e.g `files_yaml_from_source_file: .github/changed-files.yml`
+
+      - name: Run step if test file(s) change
+        # NOTE: Ensure all outputs are prefixed by the same key used above e.g. `test_(...)` | `doc_(...)` | `src_(...)` when trying to access the `any_changed` output.
+        if: steps.changed-files-yaml.outputs.test_any_changed == 'true'
+        run: |
+          echo "One or more test file(s) has changed."
+          echo "List all the files that have changed: ${{ steps.changed-files-yaml.outputs.test_all_changed_files }}"
+
+      - name: Run step if doc file(s) change
+        if: steps.changed-files-yaml.outputs.doc_any_changed == 'true'
+        run: |
+          echo "One or more doc file(s) has changed."
+          echo "List all the files that have changed: ${{ steps.changed-files-yaml.outputs.doc_all_changed_files }}"
+
+      # Example 3
+      - name: Get changed files in the docs folder
+        id: changed-files-specific
+        uses: tj-actions/changed-files@v40
+        with:
+          files: docs/*.{js,html}  # Alternatively using: `docs/**`
+          files_ignore: docs/static.js
+
+      - name: Run step if any file(s) in the docs folder change
+        if: steps.changed-files-specific.outputs.any_changed == 'true'
+        run: |
+          echo "One or more files in the docs folder has changed."
+          echo "List all the files that have changed: ${{ steps.changed-files-specific.outputs.all_changed_files }}"
+-- GHSA-8v8w-v8xg-79rf/action.yml --
+name: Branch Names
+description: Retrieve github branch or tag information without the /ref/* prefix
+author: tj-actions
+inputs:
+  strip_tag_prefix:
+    description: 'The prefix that should be stripped from the tag e.g `v` -> with a tag `v0.0.1` -> returns `0.0.1`'
+    default: ''
+    required: false
+
+outputs:
+  is_default:
+    value: ${{ steps.default.outputs.is_default }}
+    description: 'Returns `"true"` if the current branch is the default else `"false"`.'
+  is_tag:
+    value: ${{ steps.tag.outputs.is_tag }}
+    description: 'Returns `"true"` if the current branch is a tag else `"false"`.'
+  default_branch:
+    value: ${{ steps.default.outputs.default_branch }}
+    description: 'The default branch name e.g `main` OR `master`'
+  current_branch:
+    value: ${{ steps.current_branch.outputs.current_branch }}
+    description: 'The current branch name regardless of event_type e.g `main`, `feature/test`'
+  base_ref_branch:
+    value: ${{ steps.branch.outputs.base_ref_branch }}
+    description: 'The target branch of a pull request or tag e.g `main`'
+  head_ref_branch:
+    value: ${{ steps.branch.outputs.head_ref_branch }}
+    description: 'The source branch of a pull request e.g `feature/test`'
+  ref_branch:
+    value: ${{ steps.branch.outputs.ref_branch }}
+    description: 'The branch that triggered the workflow run. e.g `1/merge`, `main`'
+  tag:
+    value: ${{ steps.tag.outputs.tag }}
+    description: 'The tag that triggered the workflow run. e.g `v0.0.1`, `0.0.1`'
+
+runs:
+  using: "composite"
+  steps:
+    - id: branch
+      run: |
+        # "Set branch names..."
+        if [[ "${{ github.ref }}" != "refs/tags/"* ]]; then
+          BASE_REF=$(printf "%q" "${{ github.event.pull_request.base.ref || github.base_ref }}")
+          HEAD_REF=$(printf "%q" "${{ github.event.pull_request.head.ref || github.head_ref }}")
+          REF=$(printf "%q" "${{ github.ref }}")
+
+          BASE_REF=${BASE_REF/refs\/heads\//}
+          HEAD_REF=${HEAD_REF/refs\/heads\//}
+          REF_BRANCH=${REF/refs\/pull\//}
+          REF_BRANCH=${REF_BRANCH/refs\/heads\//}
+
+          echo "base_ref_branch=$(eval printf "%s" "$BASE_REF")" >> "$GITHUB_OUTPUT"
+          echo "head_ref_branch=$(eval printf "%s" "$HEAD_REF")" >> "$GITHUB_OUTPUT"
+          echo "ref_branch=$(eval printf "%s" "$REF_BRANCH")" >> "$GITHUB_OUTPUT"
+        else
+          BASE_REF=$(printf "%q" "${{ github.event.base_ref }}")
+          BASE_REF=${BASE_REF/refs\/heads\/${{ inputs.strip_tag_prefix }}/}
+
+          echo "base_ref_branch=$(eval printf "%s" "$BASE_REF")" >> "$GITHUB_OUTPUT"
+        fi
+      shell: bash
+    - id: current_branch
+      run: |
+        # "Set the current branch name..."
+        if [[ "${{ github.ref }}" != "refs/tags/"* ]]; then
+          if [[ ${{ github.event_name }} == *"pull_request"* ]]; then
+            echo "current_branch=${{ steps.branch.outputs.head_ref_branch }}" >> "$GITHUB_OUTPUT"
+          else
+            echo "current_branch=${{ steps.branch.outputs.ref_branch }}" >> "$GITHUB_OUTPUT"
+          fi
+        fi
+      shell: bash
+    - id: default
+      run: |
+        # "Set the default branch name..."
+        if [[ "${{ github.ref }}" != "refs/tags/"* ]]; then
+          if [[ "${{ steps.current_branch.outputs.current_branch }}" == "${{ github.event.repository.default_branch }}" && "${{ github.event.pull_request.head.repo.fork }}" != "true" ]]; then
+            echo "is_default=true" >> "$GITHUB_OUTPUT"
+            echo "default_branch=${{ github.event.repository.default_branch }}" >> "$GITHUB_OUTPUT"
+          else
+            echo "is_default=false" >> "$GITHUB_OUTPUT"
+            echo "default_branch=${{ github.event.repository.default_branch }}" >> "$GITHUB_OUTPUT"
+          fi
+        fi
+      shell: bash
+    - id: tag
+      run: |
+        # "Set the tag name..."
+        if [[ "${{ github.ref }}" == "refs/tags/"* ]]; then
+          REF=$(printf "%q" "${{ github.ref }}")
+          TAG=${REF/refs\/tags\/${{ inputs.strip_tag_prefix }}/}
+
+          echo "tag=$(eval printf "%s" "$TAG")" >> "$GITHUB_OUTPUT"
+          echo "is_tag=true" >> "$GITHUB_OUTPUT"
+        else
+          echo "is_tag=false" >> "$GITHUB_OUTPUT"
+        fi
+      shell: bash
+
+branding:
+  icon: git-branch
+  color: white
+-- GHSA-hw6r-g8gj-2987/.github/actions/filter-test-configs/action.yml --
+name: Filter test configs matrix
+
+description: |
+  Apply filter to the test configs matrix to keep only entries specified
+  by the PR test-config labels. If no test-config label is set, the same
+  test configs matrix is returned untouched.
+
+inputs:
+  github-token:
+    description: GITHUB_TOKEN
+    required: true
+  test-matrix:
+    required: true
+    type: string
+    description: JSON description of what test configs to run.
+
+outputs:
+  test-matrix:
+    description: The filtered test configs matrix.
+    value: ${{ steps.filter.outputs.test-matrix }}
+  is-test-matrix-empty:
+    description: True if the filtered test configs matrix is empty. False otherwise.
+    value: ${{ steps.filter.outputs.is-test-matrix-empty }}
+  keep-going:
+    description: True if keep-going label was on PR.
+    value: ${{ steps.filter.outputs.keep-going }}
+  reenabled-issues:
+    description: Comma separated list of issue numbers that should correspond to disable test issues that the PR fixes
+    value: ${{ steps.filter.outputs.reenabled-issues }}
+
+runs:
+  using: composite
+  steps:
+    - uses: nick-fields/retry@3e91a01664abd3c5cd539100d10d33b9c5b68482
+      name: Setup dependencies
+      env:
+        GITHUB_TOKEN: ${{ inputs.github-token }}
+      with:
+        shell: bash
+        timeout_minutes: 10
+        max_attempts: 5
+        retry_wait_seconds: 30
+        command: |
+          set -eux
+          python3 -m pip install requests==2.26.0 pyyaml==6.0
+
+    - name: Parse ref
+      id: parse-ref
+      shell: bash
+      run: |
+        set -x
+
+        # Use relative path here as this could be checked out anywhere, not necessarily
+        # in runner workspace
+        python3 "${GITHUB_ACTION_PATH}/../../scripts/parse_ref.py"
+
+    - name: Get the job name
+      id: get-job-name
+      continue-on-error: true
+      shell: bash
+      run: |
+        set -x
+
+        # TODO: This is a very hacky way to get the job name. GitHub runner has the info
+        # but doesn't expose it in anyway. The job name is part of the job message the
+        # runner receives, so it's there and printed out to the diag log. Below is the
+        # code responsible for printing it. Need to check with GitHub to see if they can
+        # expose this variable as part of GitHub context.
+        # https://github.com/actions/runner/blob/main/src/Runner.Worker/JobExtension.cs#L345
+        pushd "${{ runner.workspace }}/../../_diag"
+        pwd
+
+        LOG_FILE=$(grep -l -r "${{ github.sha }}" *.log | tail -n 1)
+        if [ -n "${LOG_FILE}" ]; then
+          # For some reasons, awk {print $2} on Linux and Windows (bash) work correctly while it
+          # needs to be awk {print $3} on MacOS
+          case ${RUNNER_OS} in
+            macOS)
+              JOB_NAME=$(grep -r "\"jobDisplayName\"" "${LOG_FILE}" | awk -F '[:]' '{print $3}' | sed 's/"//g' | xargs)
+              ;;
+            *)
+              JOB_NAME=$(grep -r "\"jobDisplayName\"" "${LOG_FILE}" | awk -F '[:]' '{print $2}' | sed 's/"//g' | xargs)
+              ;;
+          esac
+          echo "job-name=${JOB_NAME}" >> "${GITHUB_OUTPUT}"
+        fi
+
+        popd
+
+    - name: Select all requested test configurations
+      shell: bash
+      env:
+        GITHUB_TOKEN: ${{ inputs.github-token }}
+        JOB_NAME: ${{ steps.get-job-name.outputs.job-name }}
+      id: filter
+      run: |
+        echo "Workflow: ${GITHUB_WORKFLOW}"
+        echo "Job name: ${JOB_NAME}"
+
+        # Use relative path here as this could be checked out anywhere, not necessarily
+        # in runner workspace
+        python3 "${GITHUB_ACTION_PATH}/../../scripts/filter_test_configs.py" \
+          --workflow "${GITHUB_WORKFLOW}" \
+          --job-name "${JOB_NAME}" \
+          --test-matrix "${{ inputs.test-matrix }}" \
+          --pr-number "${{ github.event.pull_request.number }}" \
+          --tag "${{ steps.parse-ref.outputs.tag }}" \
+          --event-name "${{ github.event_name }}" \
+          --schedule "${{ github.event.schedule }}" \
+          --branch "${{ github.event.workflow_run.head_branch }}"
+
+    - name: Print the filtered test matrix
+      shell: bash
+      run: |
+        echo "Filtered matrix:"
+        echo "${{ steps.filter.outputs.test-matrix }}"
+
+        echo
+        echo "Is the current job unstable? ${{ steps.filter.outputs.is-unstable }}"
+
+        echo
+        echo "Is keep-going label set? ${{ steps.filter.outputs.keep-going }}"
+
+        echo
+        echo "Renabled issues? ${{ steps.filter.outputs.reenabled-issues }}"
+-- GHSA-rg3q-prf8-qxmp/action.yml --
+name: "Check WIP"
+description: "Checks for WIP patterns in Titles"
+branding:
+  icon: box
+  color: blue
+inputs:
+  title:
+    description: "Text to perform pattern match against"
+    required: true
+    default: "${{ github.event.pull_request.title }}"
+  regex:
+    description: "Regex pattern to match in title"
+    required: true
+    # starts with zero or more leading whitespace chars, WIP and zero or more colons
+    default: "^[[:space:]]*(WIP)+(:)*"
+runs:
+  using: "composite"
+  steps:
+    - shell: bash
+      run: |
+        set -ex
+
+        # TODO (@mgasch): make configurable
+        # case-insensitive
+        shopt -s nocasematch
+
+        if [[ '${{ inputs.title }}' =~ ${{ inputs.regex }} ]]; then
+          echo "::error::Title marked as work in progress"
+          exit 1
+        else
+          echo "::debug::Title not marked as work in progress"
+        fi
+
+        # unset nocasematch option
+        shopt -u nocasematch
+-- GHSA-6q4m-7476-932w/action.yml --
+name: "GitHub Slug Action"
+description: "GitHub Action to expose slug value of environment variables inside your GitHub workflow"
+author: "Romain Lespinasse"
+branding:
+  icon: "minimize"
+  color: "blue"
+inputs:
+  prefix:
+    description: "Value to prepend to each generated variable"
+    default: ""
+    required: false
+  slug-maxlength:
+    description: "Max length of the slugified values"
+    default: "63"
+    required: true
+  short-length:
+    description: "Length of the shortify values (git default if empty)"
+    required: false
+runs:
+  using: "composite"
+  steps:
+    - run: $GITHUB_ACTION_PATH/preflight.sh
+      id: prefligth
+      shell: bash
+      env:
+        INPUT_SLUG_MAXLENGTH: ${{ inputs.slug-maxlength }}
+        INPUT_SHORT_LENGTH: ${{ inputs.short-length }}
+
+    - uses: rlespinasse/slugify-value@v1.4.0
+      with:
+        key: GITHUB_REPOSITORY
+        value: ${{ github.repository }}
+        prefix: ${{ inputs.prefix }}
+        slug-maxlength: ${{ inputs.slug-maxlength }}
+    - uses: rlespinasse/slugify-value@v1.4.0
+      with:
+        key: GITHUB_REF
+        prefix: ${{ inputs.prefix }}
+        slug-maxlength: ${{ inputs.slug-maxlength }}
+    - uses: rlespinasse/slugify-value@v1.4.0
+      with:
+        key: GITHUB_HEAD_REF
+        prefix: ${{ inputs.prefix }}
+        slug-maxlength: ${{ inputs.slug-maxlength }}
+    - uses: rlespinasse/slugify-value@v1.4.0
+      with:
+        key: GITHUB_BASE_REF
+        prefix: ${{ inputs.prefix }}
+        slug-maxlength: ${{ inputs.slug-maxlength }}
+
+    # Specific values
+    - uses: rlespinasse/slugify-value@v1.4.0
+      with:
+        key: GITHUB_EVENT_REF
+        value: ${{ github.event.ref }}
+        prefix: ${{ inputs.prefix }}
+        slug-maxlength: ${{ inputs.slug-maxlength }}
+
+    # Calculated values
+    - id: get-github-ref-name
+      run: |
+        refname="${{ github.head_ref || github.ref_name }}"
+        if [ -f "$GITHUB_OUTPUT" ]; then
+          echo "github-ref-name=${refname}" >> "$GITHUB_OUTPUT"
+        else
+          echo "::set-output name=github-ref-name::${refname}"
+        fi
+      shell: bash
+    - uses: rlespinasse/slugify-value@v1.4.0
+      with:
+        key: GITHUB_REF_NAME
+        value: ${{ steps.get-github-ref-name.outputs.github-ref-name }}
+        prefix: ${{ inputs.prefix }}
+        slug-maxlength: ${{ inputs.slug-maxlength }}
+    - id: get-github-repository-owner-part
+      run: |
+        ownerpart=$(echo $GITHUB_REPOSITORY | cut -d/ -f1)
+        if [ -f "$GITHUB_OUTPUT" ]; then
+          echo "github-repository-owner-part=${ownerpart}" >> "$GITHUB_OUTPUT"
+        else
+          echo "::set-output name=github-repository-owner-part::${ownerpart}"
+        fi
+      shell: bash
+    - uses: rlespinasse/slugify-value@v1.4.0
+      with:
+        key: GITHUB_REPOSITORY_OWNER_PART
+        value: ${{ steps.get-github-repository-owner-part.outputs.github-repository-owner-part }}
+        prefix: ${{ inputs.prefix }}
+        slug-maxlength: ${{ inputs.slug-maxlength }}
+    - id: get-github-repository-name-part
+      run: |
+        namepart=$(echo $GITHUB_REPOSITORY | cut -d/ -f2)
+        if [ -f "$GITHUB_OUTPUT" ]; then
+          echo "github-repository-name-part=${namepart}" >> "$GITHUB_OUTPUT"
+        else
+          echo "::set-output name=github-repository-name-part::${namepart}"
+        fi
+      shell: bash
+    - uses: rlespinasse/slugify-value@v1.4.0
+      with:
+        key: GITHUB_REPOSITORY_NAME_PART
+        value: ${{ steps.get-github-repository-name-part.outputs.github-repository-name-part }}
+        prefix: ${{ inputs.prefix }}
+        slug-maxlength: ${{ inputs.slug-maxlength }}
+
+    # Short
+    - uses: rlespinasse/shortify-git-revision@v1.6.0
+      with:
+        name: GITHUB_SHA
+        short-on-error: true
+        length: ${{ steps.prefligth.outputs.PREFLIGHT_SHORT_LENGTH }}
+        prefix: ${{ inputs.prefix }}
+    - uses: rlespinasse/shortify-git-revision@v1.6.0
+      with:
+        name: GITHUB_EVENT_PULL_REQUEST_HEAD_SHA
+        revision: ${{ github.event.pull_request.head.sha }}
+        short-on-error: true
+        length: ${{ steps.prefligth.outputs.PREFLIGHT_SHORT_LENGTH }}
+        prefix: ${{ inputs.prefix }}
+-- GHSA-2487-9f55-2vg9/action.yml --
+name: ozi-publish
+description: "OZI publish action."
+inputs:
+  github-token:
+    description: "GitHub workflow-generated token."
+    required: true
+  create-pull-request:
+    description: "Create a pull request on the default branch."
+    default: false
+  pull-request-body:
+    description: "Text to use for the pull request body."
+    default: "Created automatically. Manually close and reopen to enable checks."
+runs:
+  using: "composite"
+  steps:
+    - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
+
+    - uses: actions/download-artifact@d3f86a106a0bac45b974a628896c90dbdf5c8093
+
+    - name: Move artifact
+      run: cp -a artifact/. ./
+      shell: bash
+
+    - name: Publish package distributions to GitHub Releases
+      uses: python-semantic-release/publish-action@1aa9f41fac5d531e6764e1991b536783337f3a56
+      with:
+        github_token: ${{ inputs.github-token }}
+
+    - name: Get HEAD branch name
+      id: head
+      if: ${{ fromJSON(inputs.create-pull-request) == true }}
+      run: git remote show origin | grep 'HEAD branch' | cut -d ":" -f2 | sed 's/ /name=/' >> $GITHUB_OUTPUT
+      shell: bash
+
+    - name: Create pull request
+      if: ${{ fromJSON(inputs.create-pull-request) == true }}
+      run: gh pr create -B ${{ steps.head.outputs.name }} -H ${{ github.head_ref || github.ref_name }} --title 'Merge ${{ github.head_ref || github.ref_name }} into ${{ steps.head.outputs.name }}' --body '${{ inputs.pull-request-body }}'
+      env:
+          GITHUB_TOKEN: ${{ inputs.github-token }}
+      shell: bash
+-- GHSA-phf6-hm3h-x8qp/.github/workflows/scalafmt-fix.yml --
+name: 'ScalaFmt Fix'
+
+# This GitHub Action runs the ScalaFmt linting tool on the entire codebase.
+# It will fix, commit, and push linted code.
+# It will only run when someone comments "scalafmt" on a PR.
+
+run-name: ScalaFmt Fix
+
+on:
+  issue_comment:
+    types:
+      - created
+  workflow_dispatch:
+    branch_name:
+      description: 'Branch to run ScalaFmt against'
+      required: true
+  pull_request_target:
+    types:
+      - opened
+      - synchronize
+
+jobs:
+  run-scalafmt-fix:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - name: Determine Target Branch
+        id: determine-branch
+        run: |
+          if [[ "${{ github.event_name }}" == "workflow_dispatch" ]]; then
+            echo "::set-output name=target_branch::${{ inputs.branch_name }}"
+          else
+            echo "::set-output name=target_branch::${{ github.event.pull_request.head.ref }}"
+          fi
+        shell: bash
+        env:
+          inputs.branch_name: ${{ inputs.branch_name }}
+      - name: Check for ScalaFmt Comment
+        id: check-comment
+        run: |
+          if [[ "${{ github.event_name }}" == "issue_comment" && "${{ github.event.comment.body }}" == *"scalafmt"* ]]; then
+            echo "::set-output name=comment-triggered::true"
+          else
+            echo "::set-output name=comment-triggered::false"
+          fi
+        shell: bash
+      - uses: actions/checkout@v3 # checkout the cromwell repo
+        with:
+         ref: ${{ inputs.target-branch }}
+      - uses: ./.github/set_up_cromwell_action
+        with:
+          cromwell_repo_token: ${{ secrets.BROADBOT_GITHUB_TOKEN }}
+      - name: Run ScalaFmt Fixup
+        if: steps.check-comment.outputs.comment-triggered == 'true' || github.event_name == 'workflow_dispatch'
+        env:
+          BROADBOT_GITHUB_TOKEN: ${{ secrets.BROADBOT_GITHUB_TOKEN }}
+        run: |
+          sbt scalafmtAll
+          git config --global user.email "broadbot@broadinstitute.org"
+          git config --global user.name "Broad Bot"
+          git add .
+          git commit -m "ScalaFmt fixup via Broad Bot"
+          git push origin ${{ steps.determine-branch.outputs.target_branch }}
+        working-directory: ${{ github.workspace }}
+-- GHSA-65rg-554r-9j5x/action.yml --
+name: "Lychee Broken Link Checker"
+description: "Quickly check links in Markdown, HTML, and text files"
+
+inputs:
+  args:
+    description: "Lychee arguments (https://github.com/lycheeverse/lychee#commandline-parameters)"
+    default: "--verbose --no-progress './**/*.md' './**/*.html' './**/*.rst'"
+    required: false
+  debug:
+    description: "Enable debug output in action (set -x). Helpful for troubleshooting."
+    default: false
+    required: false
+  fail:
+    description: "Fail entire pipeline on error (i.e. when lychee exit code is not 0)"
+    default: true
+    required: false
+  failIfEmpty:
+    description: "Fail entire pipeline if no links were found"
+    default: true
+    required: false
+  format:
+    description: "Summary output format (e.g. json)"
+    default: "markdown"
+    required: false
+  jobSummary:
+    description: "Write GitHub job summary at the end of the job (written on Markdown output only)"
+    default: true
+    required: false
+  lycheeVersion:
+    description: "Use custom version of lychee link checker"
+    default: v0.16.1
+    required: false
+  output:
+    description: "Summary output file path"
+    default: "lychee/out.md"
+    required: false
+  token:
+    description: "Your GitHub Access Token, defaults to: {{ github.token }}"
+    default: ${{ github.token }}
+    required: false
+
+outputs:
+  exit_code:
+    description: "The exit code returned from Lychee"
+    value: ${{ steps.run-lychee.outputs.exit_code }}
+
+runs:
+  using: "composite"
+  steps:
+    - name: Set up environment
+      run: |
+        echo "$HOME/.local/bin" >> "$GITHUB_PATH"
+        mkdir -p "$HOME/.local/bin"
+      shell: bash
+
+    - name: Clean up existing lychee files
+      run: |
+        # Remove any existing lychee binaries or archives to prevent conflicts
+        rm -f "$HOME/.local/bin/lychee"
+        rm -rf lychee
+        rm -f "${{ steps.lychee-filename.outputs.filename }}"
+      shell: bash
+
+    - name: Download and extract lychee
+      id: lychee-setup
+      run: |
+        # Determine filename and download URL based on version
+        if [[ '${{ inputs.lycheeVersion }}' =~ ^v0\.0|^v0\.1[0-5]\. ]]; then
+          FILENAME="lychee-${{ inputs.lycheeVersion }}-x86_64-unknown-linux-gnu.tar.gz"
+          DOWNLOAD_URL="https://github.com/lycheeverse/lychee/releases/download/${{ inputs.lycheeVersion }}/${FILENAME}"
+        else
+          FILENAME="lychee-x86_64-unknown-linux-gnu.tar.gz"
+          if [[ '${{ inputs.lycheeVersion }}' == 'nightly' ]]; then
+            DOWNLOAD_URL="https://github.com/lycheeverse/lychee/releases/download/nightly/${FILENAME}"
+          elif [[ '${{ inputs.lycheeVersion }}' == 'latest' ]]; then
+            DOWNLOAD_URL="https://github.com/lycheeverse/lychee/releases/latest/download/${FILENAME}"
+          else
+            DOWNLOAD_URL="https://github.com/lycheeverse/lychee/releases/download/lychee-${{ inputs.lycheeVersion }}/${FILENAME}"
+          fi
+        fi
+
+        echo "Downloading from: ${DOWNLOAD_URL}"
+        curl -sfLO "${DOWNLOAD_URL}"
+
+        echo "Extracting ${FILENAME}"
+        tar -xvzf "${FILENAME}"
+
+        # Output filename for use in later steps
+        echo "filename=${FILENAME}" >> $GITHUB_OUTPUT
+      shell: bash
+
+    - name: Install lychee
+      run: |
+        install -t "$HOME/.local/bin" -D lychee
+      shell: bash
+
+    - name: Clean up installation files
+      run: |
+        # Remove the downloaded archive and any unnecessary files after installation
+        rm -f "${{ steps.lychee-setup.outputs.filename }}"
+        shopt -s extglob
+        rm -f lychee!(*-bin|*-lib|*.toml)
+      shell: bash
+
+    - name: Run Lychee
+      id: run-lychee
+      run: |
+        # This step runs lychee and captures its exit code.
+        # We use 'set +e' to prevent the script from exiting immediately if lychee fails.
+        # This allows us to capture the exit code and pass it both to GitHub Actions (via GITHUB_OUTPUT)
+        # and to the shell (via the final 'exit $EXIT_CODE').
+        # This ensures that:
+        # 1. The step fails if lychee fails
+        # 2. The exit code is available as an output for subsequent steps
+        # 3. The exit code is properly propagated to the workflow
+        set +e
+        ${{ github.action_path }}/entrypoint.sh
+        EXIT_CODE=$?
+        echo "exit_code=$EXIT_CODE" >> $GITHUB_OUTPUT
+        exit $EXIT_CODE
+      env:
+        # https://github.com/actions/runner/issues/665
+        INPUT_TOKEN: ${{ inputs.TOKEN }}
+        INPUT_ARGS: ${{ inputs.ARGS }}
+        INPUT_DEBUG: ${{ inputs.DEBUG }}
+        INPUT_FAIL: ${{ inputs.FAIL }}
+        INPUT_FAILIFEMPTY: ${{ inputs.FAILIFEMPTY }}
+        INPUT_FORMAT: ${{ inputs.FORMAT }}
+        INPUT_JOBSUMMARY: ${{ inputs.JOBSUMMARY }}
+        INPUT_OUTPUT: ${{ inputs.OUTPUT }}
+      shell: bash
+branding:
+  icon: "external-link"
+  color: "purple"
+-- GHSA-f79p-9c5r-xg88/action.yml --
+name: Official SonarQube Scan
+# Warning: changing name would change URL in the marketplace
+description: >
+  Scan your code with SonarQube Server and Cloud to detect issues in 30+ languages. (Formerly SonarQube and SonarCloud)
+
+branding:
+  icon: check
+  color: green
+inputs:
+  args:
+    description: Additional arguments to the Sonar Scanner CLI
+    required: false
+  projectBaseDir:
+    description: Set the sonar.projectBaseDir analysis property
+    required: false
+  scannerVersion:
+    description: Version of the Sonar Scanner CLI to use
+    required: false
+    # to be kept in sync with sonar-scanner-version
+    default: 7.2.0.5079
+  scannerBinariesUrl:
+    description: URL to download the Sonar Scanner CLI binaries from
+    required: false
+    default: https://binaries.sonarsource.com/Distribution/sonar-scanner-cli
+runs:
+  using: "composite"
+  steps:
+    - name: Sanity checks
+      run: ${GITHUB_ACTION_PATH}/scripts/sanity-checks.sh
+      shell: bash
+      env:
+        INPUT_PROJECTBASEDIR: ${{ inputs.projectBaseDir }}
+        INPUT_SCANNERVERSION: ${{ inputs.scannerVersion }}
+    - name: Load Sonar Scanner CLI from cache
+      id: sonar-scanner-cli
+      uses: actions/cache@v4
+      env:
+        # The default value is 60mins. Reaching timeout is treated the same as a cache miss.
+        SEGMENT_DOWNLOAD_TIMEOUT_MINS: 1
+      with:
+        path: ${{ runner.temp }}/sonar-scanner-cli-${{ inputs.scannerVersion }}-${{ runner.os }}-${{ runner.arch }}
+        key: sonar-scanner-cli-${{ inputs.scannerVersion }}-${{ runner.os }}-${{ runner.arch }}
+    - name: Install Sonar Scanner CLI
+      if: ${{ env.NO_CACHE == 'true' || steps.sonar-scanner-cli.outputs.cache-hit != 'true' }}
+      run: ${GITHUB_ACTION_PATH}/scripts/install-sonar-scanner-cli.sh
+      shell: bash
+      env:
+        INPUT_SCANNERVERSION: ${{ inputs.scannerVersion }}
+        INPUT_SCANNERBINARIESURL: ${{ inputs.scannerBinariesUrl }}
+    - name: Add SonarScanner CLI to the PATH
+      run: echo "${RUNNER_TEMP}/sonar-scanner-cli-${{ inputs.scannerVersion }}-${{ runner.os }}-${{ runner.arch }}/bin" >> $GITHUB_PATH
+      shell: bash
+    - name: Run SonarScanner
+      run: |
+        args=(${{ inputs.args }})
+        cmd=(${GITHUB_ACTION_PATH}/scripts/run-sonar-scanner-cli.sh "${args[@]}")
+        "${cmd[@]}"
+      shell: bash
+      env:
+        INPUT_PROJECTBASEDIR: ${{ inputs.projectBaseDir }}
+        SONAR_SCANNER_JRE: ${{ runner.temp }}/sonar-scanner-cli-${{ inputs.scannerVersion }}-${{ runner.os }}-${{ runner.arch }}/jre
+-- GHSA-vxmw-7h4f-hqxh/action.yml --
+---
+name: pypi-publish
+description: Upload Python distribution packages to PyPI
+inputs:
+  user:
+    description: PyPI user
+    required: false
+    default: __token__
+  password:
+    description: Password for your PyPI user or an access token
+    required: false
+  repository-url:  # Canonical alias for `repository_url`
+    description: The repository URL to use
+    required: false
+  repository_url:  # DEPRECATED ALIAS; TODO: Remove in v3+
+    description: >-
+      [DEPRECATED]
+      The repository URL to use
+    deprecationMessage: >-
+      The inputs have been normalized to use kebab-case.
+      Use `repository-url` instead.
+    required: false
+    default: https://upload.pypi.org/legacy/
+  packages-dir:  # Canonical alias for `packages_dir`
+    description: The target directory for distribution
+    required: false
+    # default: dist  # TODO: uncomment once alias removed
+  packages_dir:  # DEPRECATED ALIAS; TODO: Remove in v3+
+    description: >-
+      [DEPRECATED]
+      The target directory for distribution
+    deprecationMessage: >-
+      The inputs have been normalized to use kebab-case.
+      Use `packages-dir` instead.
+    required: false
+    default: dist
+  verify-metadata:  # Canonical alias for `verify_metadata`
+    description: Check metadata before uploading
+    required: false
+    # default: 'true'  # TODO: uncomment once alias removed
+  verify_metadata:  # DEPRECATED ALIAS; TODO: Remove in v3+
+    description: >-
+      [DEPRECATED]
+      Check metadata before uploading
+    deprecationMessage: >-
+      The inputs have been normalized to use kebab-case.
+      Use `verify-metadata` instead.
+    required: false
+    default: 'true'
+  skip-existing:  # Canonical alias for `skip_existing`
+    description: >-
+      Do not fail if a Python package distribution
+      exists in the target package index
+    required: false
+    # default: 'false'  # TODO: uncomment once alias removed
+  skip_existing:  # DEPRECATED ALIAS; TODO: Remove in v3+
+    description: >-
+      [DEPRECATED]
+      Do not fail if a Python package distribution
+      exists in the target package index
+    deprecationMessage: >-
+      The inputs have been normalized to use kebab-case.
+      Use `skip-existing` instead.
+    required: false
+    default: 'false'
+  verbose:
+    description: Show verbose output.
+    required: false
+    default: 'false'
+  print-hash:  # Canonical alias for `print_hash`
+    description: Show hash values of files to be uploaded
+    required: false
+    # default: 'false'  # TODO: uncomment once alias removed
+  print_hash:  # DEPRECATED ALIAS; TODO: Remove in v3+
+    description: >-
+      [DEPRECATED]
+      Show hash values of files to be uploaded
+    deprecationMessage: >-
+      The inputs have been normalized to use kebab-case.
+      Use `print-hash` instead.
+    required: false
+    default: 'false'
+  attestations:
+    description: >-
+      [EXPERIMENTAL]
+      Enable experimental support for PEP 740 attestations.
+      Only works with PyPI and TestPyPI via Trusted Publishing.
+    required: false
+    default: 'true'
+branding:
+  color: yellow
+  icon: upload-cloud
+runs:
+  using: composite
+  steps:
+  - name: Fail-fast in unsupported environments
+    if: runner.os != 'Linux'
+    run: |
+      >&2 echo This action is only able to run under GNU/Linux environments
+      exit 1
+    shell: bash -eEuo pipefail {0}
+  - name: Reset path if needed
+    run: |
+      # Reset path if needed
+      # https://github.com/pypa/gh-action-pypi-publish/issues/112
+      if [[ $PATH != *"/usr/bin"* ]]; then
+        echo "\$PATH=$PATH. Resetting \$PATH for GitHub Actions."
+        PATH="/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin"
+        echo "PATH=$PATH" >>"$GITHUB_ENV"
+        echo "$PATH" >>"$GITHUB_PATH"
+        echo "\$PATH reset. \$PATH=$PATH"
+      fi
+    shell: bash
+  - name: Set repo and ref from which to run Docker container action
+    id: set-repo-and-ref
+    run: |
+      # Set repo and ref from which to run Docker container action
+      # to handle cases in which `github.action_` context is not set
+      # https://github.com/actions/runner/issues/2473
+      REF=${{ env.ACTION_REF || env.PR_REF || github.ref_name }}
+      REPO=${{ env.ACTION_REPO || env.PR_REPO || github.repository }}
+      REPO_ID=${{ env.PR_REPO_ID || github.repository_id }}
+      echo "ref=$REF" >>"$GITHUB_OUTPUT"
+      echo "repo=$REPO" >>"$GITHUB_OUTPUT"
+      echo "repo-id=$REPO_ID" >>"$GITHUB_OUTPUT"
+    shell: bash
+    env:
+      ACTION_REF: ${{ github.action_ref }}
+      ACTION_REPO: ${{ github.action_repository }}
+      PR_REF: ${{ github.event.pull_request.head.ref }}
+      PR_REPO: ${{ github.event.pull_request.head.repo.full_name }}
+      PR_REPO_ID: ${{ github.event.pull_request.base.repo.id }}
+  - name: Discover pre-installed Python
+    id: pre-installed-python
+    run: |
+      # 🔎 Discover pre-installed Python
+      echo "python-path=$(command -v python3 || :)" | tee -a "${GITHUB_OUTPUT}"
+    shell: bash
+  - name: Install Python 3
+    if: steps.pre-installed-python.outputs.python-path == ''
+    id: new-python
+    uses: actions/setup-python@v5
+    with:
+      python-version: 3.x
+  - name: Create Docker container action
+    run: |
+      # Create Docker container action
+      ${{
+        steps.pre-installed-python.outputs.python-path == ''
+        && steps.new-python.outputs.python-path
+        || steps.pre-installed-python.outputs.python-path
+      }} '${{ github.action_path }}/create-docker-action.py'
+    env:
+      REF: ${{ steps.set-repo-and-ref.outputs.ref }}
+      REPO: ${{ steps.set-repo-and-ref.outputs.repo }}
+      REPO_ID: ${{ steps.set-repo-and-ref.outputs.repo-id }}
+    shell: bash
+  - name: Run Docker container
+    # The generated trampoline action must exist in the allowlisted
+    # runner-defined working directory so it can be referenced by the
+    # relative path starting with `./`.
+    #
+    # This mutates the end-user's workspace slightly but uses a path
+    # that is unlikely to clash with somebody else's use.
+    #
+    # We cannot use randomized paths because the composite action
+    # syntax does not allow accessing variables in `uses:`. This
+    # means that we end up having to hardcode this path both here and
+    # in `create-docker-action.py`.
+    uses: ./.github/.tmp/.generated-actions/run-pypi-publish-in-docker-container
+    with:
+      user: ${{ inputs.user }}
+      password: ${{ inputs.password }}
+      repository-url: ${{ inputs.repository-url || inputs.repository_url }}
+      packages-dir: ${{ inputs.packages-dir || inputs.packages_dir }}
+      verify-metadata: ${{ inputs.verify-metadata || inputs.verify_metadata }}
+      skip-existing: ${{ inputs.skip-existing || inputs.skip_existing }}
+      verbose: ${{ inputs.verbose }}
+      print-hash: ${{ inputs.print-hash || inputs.print_hash }}
+      attestations: ${{ inputs.attestations }}
+-- GHSA-pwf7-47c3-mfhx/action.yml --
+name: prek-action
+description: Run pre-commit hooks using prek
+inputs:
+  extra-args:
+    description: Options to pass to `prek run`
+    required: false
+    default: '--all-files'
+  extra_args:
+    description: Options to pass to `prek run` (deprecated, use extra-args)
+    required: false
+  install-only:
+    description: Only install prek, do not run it
+    required: false
+    default: 'false'
+  prek-version:
+    description: Version of prek to install (e.g., '0.2.1', 'latest')
+    required: false
+    default: 'latest'
+  working-directory:
+    description: The working directory to run prek in
+    required: false
+    default: '.'
+runs:
+  using: composite
+  steps:
+  - name: Resolve download URL
+    id: resolve
+    run: |
+      if [ "${{ inputs.prek-version }}" = "latest" ]; then
+        echo "version=latest" >> $GITHUB_OUTPUT
+        echo "base_url=https://github.com/j178/prek/releases/latest/download/" >> $GITHUB_OUTPUT
+      else
+        VERSION="${{ inputs.prek-version }}"
+        VERSION="${VERSION#v}"
+        VERSION="v$VERSION"
+        echo "version=$VERSION" >> $GITHUB_OUTPUT
+        echo "base_url=https://github.com/j178/prek/releases/download/$VERSION/" >> $GITHUB_OUTPUT
+      fi
+    shell: bash
+  - name: Install prek
+    run: "curl --proto '=https' --tlsv1.2 -LsSf ${{ steps.resolve.outputs.base_url }}prek-installer.sh | sh"
+    shell: bash
+    if: runner.os != 'Windows'
+  - name: Install prek (Windows)
+    run: 'powershell -ExecutionPolicy Bypass -c "irm ${{ steps.resolve.outputs.base_url }}prek-installer.ps1 | iex"'
+    shell: powershell
+    if: runner.os == 'Windows'
+  - uses: actions/cache@0400d5f644dc74513175e3cd8d07132dd4860809 # v4.2.4
+    with:
+      path: |
+        ~/.cache/prek
+        ~\AppData\Local\prek
+      key: prek-v1|${{ runner.os }}|${{ runner.arch }}|${{ hashFiles(format('{0}/**/.pre-commit-config.yaml', inputs.working-directory)) }}
+    if: inputs.install-only == 'false'
+  - run: prek run --show-diff-on-failure --color=always ${{ inputs.extra_args || inputs.extra-args }}
+    shell: bash
+    working-directory: ${{ inputs.working-directory }}
+    if: inputs.install-only == 'false'
+branding:
+  icon: 'git-commit'
+  color: 'orange'
+-- GHSA-f67f-hcr6-94mf/.github/workflows/zenclaw-discord.yml --
+name: ZenClaw Discord Integration
+
+on:
+  push:
+    branches: [main, master]
+  issues:
+    types: [opened, closed, reopened]
+  workflow_run:
+    workflows: ["Test Coverage", "Security Scan", "CI/CD Pipeline"]
+    types: [completed]
+  workflow_dispatch:
+    inputs:
+      message:
+        description: 'Test message'
+        required: true
+        default: 'ZenClaw Test Notification'
+      channel:
+        description: 'Channel type'
+        required: true
+        default: 'logs'
+        type: choice
+        options:
+        - logs
+        - alerts
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+permissions:
+  contents: read
+
+jobs:
+  notify-discord:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    if: always()
+
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v6
+
+      - name: Check Discord Webhook Secret
+        id: check-secret
+        run: |
+          if [ -n "${{ secrets.DISCORD_WEBHOOK_URL }}" ]; then
+            echo "has_secret=true" >> $GITHUB_OUTPUT
+            echo "✅ Discord webhook secret is configured"
+          else
+            echo "has_secret=false" >> $GITHUB_OUTPUT
+            echo "⚠️ DISCORD_WEBHOOK_URL secret is not configured"
+          fi
+
+      - name: Setup Python
+        if: steps.check-secret.outputs.has_secret == 'true'
+        uses: actions/setup-python@v6
+        with:
+          python-version: '3.11'
+
+      - name: Prepare Notification
+        id: prep
+        if: steps.check-secret.outputs.has_secret == 'true'
+        run: |
+          EVENT="${{ github.event_name }}"
+          COLOR="3447003"
+          TITLE="ZenClaw Alert"
+          DESCRIPTION=""
+
+          case "$EVENT" in
+            push)
+              COLOR="3066993"
+              TITLE="🚀 Push to main"
+              DESCRIPTION="${{ github.event.head_commit.message }}"
+              ;;
+            issues)
+              if [ "${{ github.event.action }}" == "opened" ]; then
+                COLOR="15158332"
+                TITLE="🐛 New Issue"
+              else
+                COLOR="3066993"
+                TITLE="✅ Issue Resolved"
+              fi
+              DESCRIPTION="${{ github.event.issue.title }}"
+              ;;
+            workflow_run)
+              if [ "${{ github.event.workflow_run.conclusion }}" == "success" ]; then
+                COLOR="3066993"
+                TITLE="✅ Workflow Success"
+              else
+                COLOR="15158332"
+                TITLE="❌ Workflow Failed"
+              fi
+              DESCRIPTION="${{ github.event.workflow_run.name }}"
+              ;;
+            workflow_dispatch)
+              COLOR="3447003"
+              TITLE="🧪 Test Message"
+              DESCRIPTION="${{ github.event.inputs.message }}"
+              ;;
+          esac
+
+          # Truncate and sanitize
+          DESCRIPTION=$(echo "$DESCRIPTION" | tr '\n' ' ' | cut -c1-1000)
+
+          echo "color=$COLOR" >> $GITHUB_OUTPUT
+          echo "title=$TITLE" >> $GITHUB_OUTPUT
+          echo "description=$DESCRIPTION" >> $GITHUB_OUTPUT
+          echo "event=$EVENT" >> $GITHUB_OUTPUT
+
+      - name: Send to Discord
+        if: steps.check-secret.outputs.has_secret == 'true'
+        env:
+          DISCORD_WEBHOOK: ${{ secrets.DISCORD_WEBHOOK_URL }}
+          COLOR: ${{ steps.prep.outputs.color }}
+          TITLE: ${{ steps.prep.outputs.title }}
+          DESCRIPTION: ${{ steps.prep.outputs.description }}
+          EVENT: ${{ steps.prep.outputs.event }}
+          REPO: ${{ github.repository }}
+          ACTOR: ${{ github.actor }}
+        run: |
+          TIMESTAMP=$(date -u +%Y-%m-%dT%H:%M:%SZ)
+
+          # Create JSON using jq for proper escaping
+          JSON_PAYLOAD=$(jq -n \
+            --arg title "$TITLE" \
+            --arg description "$DESCRIPTION" \
+            --argjson color "$COLOR" \
+            --arg timestamp "$TIMESTAMP" \
+            --arg footer_text "ZenClaw Guardian | $EVENT" \
+            --arg repo "$REPO" \
+            --arg actor "$ACTOR" \
+            '{
+              embeds: [{
+                title: $title,
+                description: $description,
+                color: $color,
+                timestamp: $timestamp,
+                footer: { text: $footer_text },
+                fields: [
+                  {name: "Repository", value: $repo, inline: true},
+                  {name: "Actor", value: $actor, inline: true}
+                ]
+              }]
+            }')
+
+          # Send with retry
+          for i in 1 2 3; do
+            HTTP_CODE=$(curl -s -o /tmp/response.txt -w "%{http_code}" -X POST "$DISCORD_WEBHOOK" \
+              -H "Content-Type: application/json" \
+              -d "$JSON_PAYLOAD" 2>/dev/null || echo "000")
+
+            if [ "$HTTP_CODE" == "204" ]; then
+              echo "✅ Discord notification sent"
+              exit 0
+            elif [ "$HTTP_CODE" == "429" ] && [ $i -lt 3 ]; then
+              echo "⚠️ Rate limited, retrying..."
+              sleep 5
+            else
+              echo "⚠️ Response: $HTTP_CODE"
+              exit 0  # Don't fail
+            fi
+          done
+
+      - name: Summary
+        if: always()
+        run: |
+          echo "## ZenClaw Discord Notification" >> $GITHUB_STEP_SUMMARY
+          echo "Event: ${{ steps.prep.outputs.event || github.event_name }}" >> $GITHUB_STEP_SUMMARY
+          if [ "${{ steps.check-secret.outputs.has_secret }}" == "true" ]; then
+            echo "Status: Webhook configured" >> $GITHUB_STEP_SUMMARY
+          else
+            echo "Status: Webhook NOT configured" >> $GITHUB_STEP_SUMMARY
+          fi
+-- GHSA-r4fj-r33x-8v88/.github/workflows/comment.yaml --
+name: Reply to issue comments
+on:
+  issue_comment:
+    types: [created]
+permissions:
+  issues: write
+jobs:
+  reply:
+    runs-on: ubuntu-latest
+    if: contains(github.event.comment.body, '@njzjz-bot')
+    steps:
+      - uses: actions/checkout@v6
+      - name: Extract identifiers
+        id: extract-identifiers
+        run: |
+          echo identifiers=$(echo "${{ github.event.comment.body }}" | grep -oE '@njzjz-bot .*' | head -n1 | cut -c12- | xargs) >> $GITHUB_OUTPUT
+      - name: Run wenxian
+        id: wenxian
+        uses: ./
+        with:
+          id: ${{ steps.extract-identifiers.outputs.identifiers }}
+      - name: Prepare the comment body
+        id: prepare-comment
+        run: |
+          {
+            echo 'comment<<EOF'
+            echo '@${{ github.event.comment.user.login }} Here is the BibTeX entry for `${{ steps.extract-identifiers.outputs.identifiers }}`:'
+            echo '```bibtex'
+            echo "${OUTPUT_BIBTEX}"
+            echo '```'
+            echo EOF
+          } >> $GITHUB_OUTPUT
+        env:
+          OUTPUT_BIBTEX: ${{ steps.wenxian.outputs.bibtex }}
+      - name: Post comment
+        run: |
+          echo "${OUTPUT_COMMENT}" | gh issue comment ${{ github.event.issue.number }} --body-file -
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          OUTPUT_COMMENT: ${{ steps.prepare-comment.outputs.comment }}
+-- GHSA-6p2j-742g-835f/.github/workflows/release-candidate.yaml --
+
+# This action is adapted from https://github.com/at-wat/neonavigation/blob/master/.github/workflows/release-candidate.yml
+
+name: Create release from issue
+on:
+  issues:
+    types: [opened, reopened]
+
+jobs:
+  release-candidate:
+    runs-on: ubuntu-latest
+    if: startsWith(github.event.issue.title, 'Release ')
+    steps:
+      - name: Install git-chglog
+        run: |
+          sudo mkdir -p /usr/local/src
+          sudo chmod 777 /usr/local/src
+          cd /usr/local/src
+          wget https://github.com/git-chglog/git-chglog/releases/download/v0.15.0/git-chglog_0.15.0_linux_amd64.tar.gz
+          tar zxvf git-chglog*.tar.gz
+          sudo ln /usr/local/src/git-chglog /bin/git-chglog
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: '0'
+      - name: Create release branch
+        id: create-release
+        run: |
+          git config user.name github-actions[bot]
+          git config user.email 41898282+github-actions[bot]@users.noreply.github.com
+          git remote set-url origin https://github.com/${{ github.repository }}.git
+          export VERSION=$(echo ${{ github.event.issue.title }} | sed -E 's/Release v?([0-9\.]*)/\1/g')
+          export BRANCH=release/v$VERSION
+          bash .github/scripts/update_changelog.sh $VERSION
+          git checkout -b $BRANCH
+          sed -i -E 's/version = "[0-9\.]*"/version = "'$VERSION'"/g' pyproject.toml
+          git add CHANGELOG.md pyproject.toml
+          git commit -m "release: v$VERSION"
+          echo ::set-output name=release-version::$VERSION
+          echo ::set-output name=created-branch::$BRANCH
+      - name: Sync created branch
+        run: |
+          git remote set-url origin https://${GITHUB_ACTOR}:${{ secrets.GITHUB_TOKEN }}@github.com/${{ github.repository }}.git
+          git push origin ${{ steps.create-release.outputs.created-branch }} > /dev/null 2>&1
+      - name: Open pull-request
+        uses: repo-sync/pull-request@v2
+        with:
+          source_branch: ${{ steps.create-release.outputs.created-branch }}
+          destination_branch: main
+          pr_title: "release: v${{ steps.create-release.outputs.release-version}}"
+          pr_body: close \#${{ github.event.issue.number }}
+          pr_assignee: ${{ github.actor }}
+          pr_label: "Type: Maintenance"
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+-- GHSA-c3xh-98xp-6qhf/.github/workflows/discord-issue.yml --
+name: Discord Issue Notification
+
+on:
+  issues:
+    types: [opened, closed]
+
+jobs:
+  notify-discord:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Send notification to Discord
+        env:
+          DISCORD_WEBHOOK: ${{ secrets.DISCORD_WEBHOOK_URL_ISSUE }}
+        run: |
+          STATUS="${{ github.event.action == 'opened' && '📢 **New Issue**' || '✅ **Issue Closed**' }}"
+          ISSUE_TYPE="${{ github.event_name }}"
+          ISSUE_TITLE="${{ github.event.issue.title || github.event.pull_request.title }}"
+          ISSUE_URL="${{ github.event.issue.html_url || github.event.pull_request.html_url }}"
+          AUTHOR="${{ github.actor }}"
+
+          curl -H "Content-Type: application/json" \
+            -X POST \
+            -d "{\"username\": \"GitHub Bot\", \"content\": \"${STATUS} created by **${AUTHOR}**: **${ISSUE_TITLE}**\n🔗 ${ISSUE_URL}\"}" \
+            "$DISCORD_WEBHOOK"
+-- grafana-labs-2025-04-27/.github/workflows/pr-patch-check-event.yml --
+# Owned by grafana-delivery-squad
+# Intended to be dropped into the base repo Ex: grafana/grafana
+name: Dispatch check for patch conflicts
+run-name: dispatch-check-patch-conflicts-${{ github.base_ref }}-${{ github.head_ref }}
+on:
+  pull_request_target:
+    types:
+      - opened
+      - reopened
+      - synchronize
+    branches:
+      - "main"
+      - "v*.*.*"
+      - "release-*"
+
+# Since this is run on a pull request, we want to apply the patches intended for the
+# target branch onto the source branch, to verify compatibility before merging.
+jobs:
+  dispatch-job:
+    runs-on: ubuntu-latest
+    steps:
+      - name: "Generate token"
+        id: generate_token
+        uses: tibdex/github-app-token@3beb63f4bd073e61482598c45c71c1019b59b73a
+        with:
+          # App needs Actions: Read/Write for the grafana/security-patch-actions repo
+          app_id: ${{ secrets.GRAFANA_DELIVERY_BOT_APP_ID }}
+          private_key: ${{ secrets.GRAFANA_DELIVERY_BOT_APP_PEM }}
+      - name: "Dispatch job"
+        uses: actions/github-script@v7
+        with:
+          github-token: ${{ steps.generate_token.outputs.token }}
+          script: |
+            await github.rest.actions.createWorkflowDispatch({
+                owner: 'grafana',
+                repo: 'security-patch-actions',
+                workflow_id: 'test-patches-event.yml',
+                ref: 'main',
+                inputs: {
+                  src_repo: "${{ github.repository }}",
+                  src_ref: "${{ github.head_ref }}",
+                  src_merge_sha: "${{ github.sha }}",
+                  src_pr_commit_sha: "${{ github.event.pull_request.head.sha }}",
+                  patch_repo: "${{ github.repository }}-security-patches",
+                  patch_ref: "${{ github.base_ref }}",
+                  triggering_github_handle: "${{ github.event.sender.login }}"
+                }
+            })
+-- cline-2026-02-24/.github/workflows/claude-issue-triage.yml --
+name: Claude Issue Triage
+
+on:
+  issues:
+    types: [opened]
+  # Manual trigger for backfilling existing issues. Run from terminal:
+  #   gh workflow run claude-issue-triage.yml -f issue_number=1234
+  # Or batch process:
+  #   gh issue list --state open --limit 10 --json number --jq '.[].number' | while read num; do
+  #     gh workflow run claude-issue-triage.yml -f issue_number=$num
+  #     sleep 60
+  #   done
+  workflow_dispatch:
+    inputs:
+      issue_number:
+        description: 'Issue number to triage'
+        required: true
+        type: string
+
+jobs:
+  claude-issue-triage:
+
+    runs-on: ubuntu-latest
+    timeout-minutes: 120
+    # SECURITY: These permissions are intentionally restrictive.
+    # - contents: read  -> Claude can read the codebase but CANNOT write/push any code
+    # - issues: write   -> Claude can comment and add labels (the only write access needed)
+    # - pull-requests: read -> Claude can view PR context but CANNOT create PRs
+    # This ensures that even if a malicious user attempts prompt injection via issue content,
+    # Claude cannot modify repository code, create branches, or open PRs.
+    permissions:
+      contents: read
+      issues: write
+      pull-requests: read
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Run Issue Response & Triage
+        id: triage
+        uses: anthropics/claude-code-action@v1
+        with:
+          anthropic_api_key: ${{ secrets.ANTHROPIC_API_KEY }}
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          allowed_non_write_users: "*"
+          # Allow all tools - security is enforced by GitHub permissions above (contents: read, issues: write)
+          claude_args: --model claude-opus-4-5-20251101 --allowedTools "Bash,Read,Write,Edit,Glob,Grep,WebFetch,WebSearch"
+          prompt: |
+            You're a GitHub issue first responder for the open source Cline repository.
+
+            **Issue:** #${{ github.event.issue.number || inputs.issue_number }}
+            **Title:** ${{ github.event.issue.title || 'See issue details below' }}
+            **Author:** @${{ github.event.issue.user.login || 'See issue details below' }}
+
+            ## Your job
+
+            Investigate this issue thoroughly, then post a single helpful comment that helps the user and gives maintainers the context they need.
+
+            ## Investigation
+
+            Start by reading the full issue:
+            gh issue view ${{ github.event.issue.number || inputs.issue_number }}
+
+            ### Search for duplicates and related issues
+
+            Search thoroughly for existing issues that match this one:
+            gh issue list --search "<keywords from the issue>" --state all --limit 30
+            gh issue list --search "<error messages>" --state all --limit 20
+            gh issue list --search "<affected feature/component>" --state all --limit 20
+
+            For each relevant issue you find, read it including its comments:
+            gh issue view <number> --comments
+
+            You're looking for:
+            - **Duplicates**: Issues describing the same problem. Link to them and explain why you think they're duplicates. If closed, check how they were resolved - the solution might apply here.
+            - **Related issues**: Similar problems or context that could help. Pull useful information from their comments (workarounds others found, debugging steps that helped, maintainer explanations). Link to them and explain the connection.
+
+            If there are closed issues with solutions, surface those solutions prominently - this might immediately solve the user's problem.
+
+            ### Analyze recent changes (ALWAYS DO THIS)
+
+            Many issues are regressions from recent releases. **Always** check what changed recently:
+            gh release list --limit 10
+            gh pr list --state merged --limit 50 --json number,title,mergedAt,author,body
+
+            Look for PRs merged in the last few weeks that might correlate with the issue. If you find a likely connection:
+            gh pr view <number>
+            gh pr diff <number>
+            git log --since="1 month ago" --oneline -- <relevant paths>
+            git show <commit>
+
+            **Always include your findings in your comment:**
+            - If you find a regression, call it out explicitly: which PR/commit likely caused it, who authored it, what changed, and suggest a fix direction if you can see one.
+            - If you don't find anything related, still mention it: "I analyzed recent PRs and releases but didn't find any changes that seem related to this issue."
+
+            ### Search the codebase
+
+            Find the relevant code:
+            - Use grep/find to locate code related to the issue
+            - Key areas: `src/api/` (providers/models), `src/core/prompts/` (tools/prompts), platform-specific code for VS Code vs JetBrains
+
+            ### Find documentation
+
+            Cline docs are at **https://docs.cline.bot/** and built with Mintlify from the `docs/` directory.
+
+            The URL structure maps directly to the file structure:
+            - `docs/getting-started/selecting-your-model.mdx` → https://docs.cline.bot/getting-started/selecting-your-model
+            - `docs/troubleshooting.mdx` → https://docs.cline.bot/troubleshooting
+            - Headings become anchors: `## Which Model` → `#which-model`
+
+            Search the `docs/` directory to find relevant documentation, then construct URLs to link users to:
+            ```bash
+            ls docs/
+            grep -r "keyword" docs/ --include="*.mdx" -l
+            ```
+
+            ### Identify subject matter experts
+
+            For issues that clearly need engineering attention:
+            git log --since="6 months ago" --format="%an" -- <relevant paths> | sort | uniq -c | sort -rn | head -5
+
+            Cross-reference with GitHub usernames. Include in your response (@mention, do NOT assign):
+
+            | SME | Reason |
+            |-----|--------|
+            | @username1 | Authored PR #X which modified this area |
+            | @username2 | Primary contributor to affected file |
+
+            ## Weak model detection
+
+            Many issues are caused by users running small or non-frontier models that don't tool-call reliably. Signs include:
+            - Model failing to use tools correctly
+            - Nonsensical or malformed responses
+            - User is running a small/local model or older model version
+
+            If this looks like a weak model issue, kindly suggest they try reproducing with Claude Sonnet and report back if it persists. Link to https://docs.cline.bot/getting-started/selecting-your-model if helpful. Still label and triage normally.
+
+            ## Your comment
+
+            Write a single comment as a helpful community member. Be conversational, not robotic. Include what's relevant:
+
+            - **Helpful response** - Answer their question, suggest a fix, provide a workaround. If you found solutions in related closed issues, surface those prominently.
+            - **Duplicates and related issues** - Link to any you found and explain why they're duplicates/related. Summarize useful context from their comments.
+            - **Regression analysis** - If this looks like a regression, explain what change likely caused it, link to the PR/commit, and tag the author.
+            - **Clarifying questions** - If you need more info, ask specific questions. Don't ask for things already provided.
+            - **SME table** - Include the table above if this needs engineering attention. Don't tag people for questions with obvious answers or weak-model issues.
+            - **Context for maintainers** - Relevant code paths, what you found. Keep it concise.
+            - **Docs links** - If there's relevant documentation, link to it naturally in your response as a recommendation (e.g., "For more details, check out [the Ollama setup guide](url)"). Do NOT add a "Sources" section at the end - integrate doc links into your response where they're helpful.
+            - **Possible Duplicates section** - ALWAYS include a "Possible Duplicates" section at the end of your comment listing issues that might be duplicates so maintainers can quickly close if appropriate. If none found, say "No obvious duplicates found."
+
+            ## Labels
+            First, retrieve all available labels and read their descriptions to understand what each is for:
+            gh label list --json name,description --limit 100
+
+            Then apply the appropriate labels based on your analysis. Only use labels from the list above—do not create new labels.
+            gh issue edit ${{ github.event.issue.number || inputs.issue_number }} --add-label "label1,label2"
+
+            If your regression analysis found a likely culprit (a recent PR/commit that probably caused this issue), add the "Regression" label:
+            gh issue edit ${{ github.event.issue.number || inputs.issue_number }} --add-label "Regression"
+
+            IMPORTANT: After posting your comment, add the "Bot Responded" label to indicate this issue has received an automated response:
+            gh issue edit ${{ github.event.issue.number || inputs.issue_number }} --add-label "Bot Responded"
+
+            ## Remember
+
+            - **This is a one-time automated response** - you will NOT see their reply or respond again. Never say things like "I can help you", "let me know", "once I have that info", or "I can give you more targeted help" - you won't be there to follow up. If you ask clarifying questions, frame them for the maintainers who will follow up, e.g., "If you can share X, that would help the maintainers diagnose this."
+            - Don't be formulaic. Respond to what the issue actually needs.
+            - Surface solutions from past issues - often the fastest path to helping.
+            - Connecting regressions to specific changes is extremely valuable.
+            - Link issues with #number so they're clickable.
