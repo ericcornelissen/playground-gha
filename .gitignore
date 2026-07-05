@@ -1,0 +1,85 @@
+# Ignore file for git (https://git-scm.com/docs/gitignore)
+
+/*
+
+# GitHub
+!.github/
+.github/**
+!.github/ISSUE_TEMPLATE/
+.github/ISSUE_TEMPLATE/**
+!.github/ISSUE_TEMPLATE/bug-report.yml
+!.github/ISSUE_TEMPLATE/documentation.yml
+!.github/ISSUE_TEMPLATE/feature-request.yml
+!.github/ISSUE_TEMPLATE/question.yml
+!.github/ISSUE_TEMPLATE/website.yml
+!.github/actions/
+.github/actions/**
+!.github/actions/ghasum/
+.github/actions/ghasum/**
+!.github/actions/ghasum/action.yml
+!.github/workflows/
+.github/workflows/**
+!.github/workflows/audit.yml
+!.github/workflows/check.yml
+!.github/workflows/codeql.yml
+!.github/workflows/renovate.yml
+!.github/workflows/gha.sum
+!.github/workflows/publish.yml
+!.github/workflows/semgrep.yml
+!.github/workflows/website.yml
+!.github/codeql.yml
+!.github/renovate.json
+
+# Config
+!.editorconfig
+!.gitattributes
+!.gitignore
+!.wrapcheck.yml
+
+# Docs
+!docs/
+docs/**
+!docs/EVALUATION.md
+!docs/RULES.md
+!CONTRIBUTING.md
+!README.md
+!RELEASE.md
+!SECURITY.md
+
+# Legal
+!COPYING.txt
+!DCO.txt
+
+# Security
+!capabilities.json
+
+# Source
+!cmd/
+cmd/**
+!cmd/ades/
+cmd/ades/**
+!cmd/ades/*.go
+!Containerfile
+!Containerfile.dev
+!go.mod
+!go.sum
+!schema.json
+!*.go
+
+# Test
+!axe.min.js
+!gremlins.min.js
+!test/
+test/**
+!test/*.txtar
+
+# Website
+!web/
+web/**
+!web/.well-known/
+web/.well-known/**
+!web/.well-known/security.txt
+!web/ades.go
+!web/index.css
+!web/index.html
+!web/index.js

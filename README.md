@@ -1,0 +1,303 @@
+<!-- SPDX-License-Identifier: GFDL-1.3-or-later -->
+
+# Actions Dangerous Expressions Scanner
+
+A simple tool to find dangerous uses of [GitHub Actions Expression]s.
+
+Expressions in GitHub Actions, e.g. `${{ <expression> }}`, may appear in a GitHub Actions workflow
+or manifest and are filled in at runtime. If the value is controlled by an attacker it could be used
+to hijack the continuous integration pipeline of a repository. A more detailed description of the
+problem is given by GitHub in "[Understanding the risk of script injections]". GitHub also covered
+this problem on their blog in [2023][blog-2023] and [2025][blog-2025].
+
+`ades` helps you **find** and **resolve** dangerous uses of GitHub Actions Expressions in workflows
+and manifests.
+
+[github actions expression]: https://docs.github.com/en/actions/learn-github-actions/expressions
+[understanding the risk of script injections]: https://docs.github.com/en/actions/concepts/security/script-injections#understanding-the-risk-of-script-injections
+[blog-2023]: https://github.blog/security/supply-chain-security/four-tips-to-keep-your-github-actions-workflows-secure/#1-dont-use-syntax-in-the-run-section-to-avoid-unexpected-substitution-behavior
+[blog-2025]: https://github.blog/security/vulnerability-research/how-to-catch-github-actions-workflow-injections-before-attackers-do#h-explaining-actions-workflow-injections
+
+## Overview
+
+- [Getting Started](#getting-started)
+  - [Installation](#installation)
+    - [Binary](#binary)
+    - [Docker / Podman](#docker--podman)
+    - [Go](#go)
+  - [Usage](#usage)
+- [Features](#features)
+  - [Rules](#rules)
+  - [JSON Output](#json-output)
+- [Philosophy](#philosophy)
+- [Related Work](#related-work)
+- [License](#license)
+
+## Getting Started
+
+### Installation
+
+#### Binary
+
+Download the binary for your platform manually from the [latest release] or using the CLI, for
+example using the [`gh` CLI]:
+
+```shell
+gh release download --repo ericcornelissen/ades --pattern ades_linux_amd64.tar.gz
+```
+
+Validate the provenance of the release you downloaded:
+
+```shell
+gh attestation verify --owner ericcornelissen ades_linux_amd64.tar.gz
+```
+
+Unpack the archive to get the binary out:
+
+```shell
+tar -xf ades_linux_amd64.tar.gz
+```
+
+Then add it to your `PATH` and run it:
+
+```shell
+ades -version
+```
+
+Or, without adding it to your `PATH`:
+
+```shell
+./ades -version
+```
+
+[`gh` cli]: https://cli.github.com/
+[latest release]: https://github.com/ericcornelissen/ades/releases
+
+#### Docker / Podman
+
+Install the `ades` container by pulling it:
+
+```shell
+docker pull docker.io/ericornelissen/ades:latest
+```
+
+Validate the provenance of the container using [cosign]:
+
+```shell
+cosign verify \
+  --certificate-identity-regexp 'https://github.com/ericcornelissen/ades/.+' \
+  --certificate-oidc-issuer 'https://token.actions.githubusercontent.com' \
+  docker.io/ericornelissen/ades:latest
+```
+
+Then run it using:
+
+```shell
+docker run --rm --volume $PWD:/src docker.io/ericornelissen/ades -version
+```
+
+You can set up an alias for convenience:
+
+```shell
+alias ades='docker run --rm --volume $PWD:/src docker.io/ericornelissen/ades'
+```
+
+> **NOTE:** To use [Podman] instead of [Docker] you can replace `docker` by `podman`.
+
+[cosign]: https://github.com/sigstore/cosign
+[docker]: https://www.docker.com/
+[podman]: https://podman.io/
+
+#### Go
+
+Fetch and run `ades` from source using the [Go] CLI:
+
+```shell
+go run github.com/ericcornelissen/ades/cmd/ades@latest -version
+```
+
+Or fetch and install `ades` from source using the [Go] CLI, after which it can be run directly:
+
+```shell
+go install github.com/ericcornelissen/ades/cmd/ades@latest
+ades -version
+```
+
+Or integrate `ades` into a Go project as a tool, after which it can be run without `@latest`:
+
+```shell
+go get -tool github.com/ericcornelissen/ades
+go run github.com/ericcornelissen/ades/cmd/ades -version
+```
+
+[go]: https://go.dev/
+
+### Usage
+
+Run `ades` from the root of a GitHub repository and it will report all dangerous uses of GitHub
+Actions Expressions for the project:
+
+```shell
+ades
+```
+
+Alternatively, specify any number of projects to scan, and it well report for each:
+
+```shell
+ades project-a project-b
+```
+
+If you need more information, ask for help:
+
+```shell
+ades -help
+```
+
+## Features
+
+- Scans workflow files and action manifests.
+- Reports dangerous uses of expressions in [`run:`] directives, [`actions/github-script`] scripts,
+  and known problematic action inputs.
+- Report dangerous uses of expressions in known vulnerable actions.
+- Provides suggested fixes and _(experimental)_ fully automated fixes.
+- Configurable sensitivity.
+- Machine & human readable output formats.
+
+[`actions/github-script`]: https://github.com/actions/github-script
+[`run:`]: https://docs.github.com/en/actions/using-workflows/workflow-syntax-for-github-actions#jobsjob_idstepsrun
+
+### Rules
+
+See [RULES.md].
+
+[rules.md]: ./docs/RULES.md
+
+### JSON output
+
+The `-json` flag can be used to get the scan results in JSON format. This can be used by machines to
+parse the results to process them for other purposes. The schema is defined in [`schema.json`] and
+it is intended to be stable from one version to the next for longer periods of time.
+
+[`schema.json`]: ./schema.json
+
+## Philosophy
+
+This project aims to provide a tool aimed at helping developers avoid the problem of injection
+through expressions altogether. Instead of reporting on known problematic uses of expressions,
+`ades` reports on all potentially dangerous uses of expressions, nudging developers to use safe
+alternatives from the get-go.
+
+The motivation behind this is twofold. First, it makes the tool much simpler and faster. Second, it
+acknowledges that software development is a dynamic process and that future changes can make an
+expression that is safe today unsafe. Moreover, fixing a workflow while creating it is easier now
+than it is later.
+
+## Related Work
+
+### [ARGUS: A Framework for Staged Static Taint Analysis of GitHub Workflows and Actions]
+
+A research tool aimed at finding problematic expression in GitHub Action Workflows and Actions. It
+performs taint analysis to track known problematic expressions across workflows, steps, and jobs and
+into and out of JavaScript Actions. Because of the taint analysis it will report fewer expressions
+than `ades` (fewer _false positives_), but it might also miss some problematic expressions (more
+_false negatives_).
+
+### [Automatic Security Assessment of GitHub Actions Workflows]
+
+A research tool aimed at finding misconfigurations in GitHub Action Workflows (not Actions). It
+includes looking for problematic expression in `run:` scripts. It only reports on the use of known
+problematic expression in `run:` scripts. Because it considers fewer expressions problematic it will
+report fewer expressions overall (fewer _false positives_), but it might also miss other problematic
+expressions in `run:` scripts and will completely miss others, for example expressions in
+`actions/github-script` scripts.
+
+### [Ghast]
+
+A tool to find misconfigurations in GitHub Actions Workflows (not Actions). Among other checks it
+looks for a couple known problematic uses of expressions involving the `github` context. It also
+steers users away from using inline scripts, recommending local Actions instead. As a result it will
+report fewer expressions overall (fewer _false positives_) but miss some (more _false negatives_).
+
+### [`poutine`]
+
+A tool that aims to find misconfigurations in CI/CD pipeline configurations including GitHub Actions
+Workflows. Among other checks it looks for a couple known problematic uses of expressions involving
+the `github` context. As a result it will report fewer expressions overall (fewer _false positives_)
+but also miss some (more _false negatives_).
+
+### [Raven]
+
+A tool aimed at finding misconfigurations in GitHub Actions Workflows (not Actions). Among other
+checks it looks for a couple known problematic uses of expressions involving the `github` context.
+As a result it will report fewer expressions overall (fewer _false positives_) but miss some (more
+_false negatives_).
+
+### [`zizmor`]
+
+A tool that aims to find security issues in GitHub Actions CI/CD setups. It reports various kinds of
+potential security problems including dangerous uses of expressions ("template injection"). Similar
+to `ades`, it will report on most uses of expressions but only in `run:` and `actions/github-script`
+scripts except for a small allowlist of known safe expressions. It does distinguish between
+expressions known to be attacker controlled and only potentially attacker controlled with different
+severities.
+
+[argus: a framework for staged static taint analysis of github workflows and actions]: https://www.usenix.org/conference/usenixsecurity23/presentation/muralee
+[automatic security assessment of github actions workflows]: https://dl.acm.org/doi/abs/10.1145/3560835.3564554
+[ghast]: https://github.com/bin3xish477/ghast
+[`poutine`]: https://github.com/boostsecurityio/poutine
+[raven]: https://github.com/CycodeLabs/raven
+[`zizmor`]: https://github.com/woodruffw/zizmor
+
+### Others
+
+There is other work being done in the scope of GitHub Actions security that does not focus on GitHub
+Actions Expression but is still worth mentioning:
+
+#### Tooling
+
+- [`actionlint`]: General purpose linter for GitHub Actions.
+- [`aeisenberg/codeql-actions-queries`]: A CodeQl query pack for writing reusable GitHub Actions.
+- [BOLT]: Egress-filter and runtime security tool for GitHub Actions pipelines.
+- [Bullfrog]: Control the outbound network connections of GitHub Actions pipelines.
+- [Cimon]: Runtime security to stop software supply-chain attacks on GitHub Actions pipelines.
+- [COSSETER]: Determine minimum GitHub Action job permissions statically.
+- [CodeQL support for GitHub Actions]: CodeQL queries for GitHub Actions workflows.
+- [OpenSSF Scorecard]: Assess repository configs, including GitHub Action workflows.
+- [Soteria]: Security misconfiguration detector for GitHub Actions.
+- [StepSecurity]: Runtime protection for GitHub Actions pipelines.
+
+[`actionlint`]: https://github.com/rhysd/actionlint
+[`aeisenberg/codeql-actions-queries`]: https://github.com/aeisenberg/codeql-actions-queries
+[bolt]: https://github.com/koalalab-inc/bolt
+[bullfrog]: https://github.com/bullfrogsec/bullfrog
+[cimon]: https://github.com/CycodeLabs/cimon-action
+[cosseter]: https://github.com/s3c2/cosseter
+[codeql support for github actions]: https://docs.github.com/en/code-security/code-scanning/managing-your-code-scanning-configuration/actions-built-in-queries
+[openssf scorecard]: https://scorecard.dev/
+[soteria]: https://github.com/aegis-forge/soteria
+[stepsecurity]: https://www.stepsecurity.io/
+
+#### Research
+
+- [Ambush From All Sides: Understanding Security Threats in Open-Source Software CI/CD Pipelines](https://ieeexplore.ieee.org/abstract/document/10061526)
+- [A Preliminary Study of GitHub Actions Dependencies](https://ceur-ws.org/Vol-3483/paper7.pdf)
+- [Cacheract: GitHub Actions Cache Native Malware](https://github.com/AdnaneKhan/Cacheract)
+- [Catching Smells in the Act: A GitHub Actions Workflow Investigation](https://ieeexplore.ieee.org/abstract/document/10795325)
+- [Characterizing the Security of Github CI Workflows](https://www.usenix.org/conference/usenixsecurity22/presentation/koishybayev)
+- [Continuous Intrusion: Characterizing the Security of Continuous Integration Services](https://ieeexplore.ieee.org/abstract/document/10179471)
+- [GitHub Actions Attack Diagram](https://github.com/jstawinski/GitHub-Actions-Attack-Diagram)
+- [Granite: Granular Runtime Enforcement for GitHub Actions Permissions](https://arxiv.org/abs/2512.11602)
+- [Living Off the Pipeline](https://boostsecurityio.github.io/lotp/#github-actions)
+- [Mitigating Security Issues in GitHub Actions](https://dl.acm.org/doi/abs/10.1145/3643662.3643961)
+- [On the outdatedness of workflows in the GitHub Actions ecosystem](https://www.sciencedirect.com/science/article/pii/S0164121223002224)
+- [Pipelines Under Pressure: An Empirical Study of Security Misconfigurations of GitHub Workflows](https://link.springer.com/chapter/10.1007/978-3-032-12089-2_14)
+- [Quantifying Security Issues in Reusable JavaScript Actions in GitHub Workflows](https://dl.acm.org/doi/abs/10.1145/3643991.3644899)
+
+## License
+
+The software is available under the `GPL-3.0-or-later` license, see [COPYING.txt] for the full
+license text. The documentation is available under the `GFDL-1.3-or-later` license, see [GNU Free
+Documentation License v1.3] for the full license text.
+
+[copying.txt]: ./COPYING.txt
+[gnu free documentation license v1.3]: https://www.gnu.org/licenses/fdl-1.3.en.html

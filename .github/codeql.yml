@@ -1,0 +1,10 @@
+# Configuration file for CodeQL (https://codeql.github.com/)
+
+name: ades CodeQL config
+
+packs:
+  - githubsecuritylab/codeql-go-libs@0.2.1
+  - githubsecuritylab/codeql-go-queries@0.2.1
+
+queries:
+  - uses: security-extended
