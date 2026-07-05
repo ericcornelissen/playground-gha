@@ -3,6 +3,7 @@ version 1
 JamesIves/github-pages-deploy-action@v4.8.0 k2ZA/TDxQeePExLjsAMjR1mwvtHZh4/y3SW7jNrtDKc=
 actions/attest@v4.1.1 Jg/+Ky1vD4a835qqbAMHwFBc+lxIYv/7YhQLo+U+X/g=
 actions/checkout@9c091bb21b7c1c1d1991bb908d89e4e9dddfe3e0 sHLxd6T0XFaWDFYcxWhk5jm4T5hmgxejPsHIQFdIP34=
+actions/checkout@v7.0.0 sHLxd6T0XFaWDFYcxWhk5jm4T5hmgxejPsHIQFdIP34=
 actions/create-github-app-token@1b10c78c7865c340bc4f6099eb2f838309f1e8c3 ZHZjH0QRM6Y9p81lbJ0MO8R6kBed+Y20rJCBEdPRG6Y=
 actions/setup-go@924ae3a1cded613372ab5595356fb5720e22ba16 4BuraEiVzf0Oy87ZNJ82LoLYnXaKOQ50qp9qIyuRhmI=
 docker/build-push-action@v7.3.0 pkKWriYGi6wfEtOMDrTAHUCxxtF1YwpQlXtnIlXn5Ak=
@@ -12,4 +13,3 @@ github/codeql-action@7211b7c8077ea37d8641b6271f6a365a22a5fbfa 7gPRsA6IR4lmGb/wgJ
 github/codeql-action@v4.36.0 7gPRsA6IR4lmGb/wgJlU3Xp7KhClUJ3KkwJOb473dyo=
 ncipollo/release-action@v1.21.0 BVxEx9pIhil9GqSTP9yGXoMhmlS7hjzYhAvL4fJfpyQ=
 sigstore/cosign-installer@v4.1.0 BrsAnwKWGWKPxPE4FeM5H+IX8IEsObRDjxuAqaMZVOo=
-stefanzweifel/git-auto-commit-action@4a55954c782fc1ea30b9056cd3e7a2b40ca8887d QLKNjafalgZ/np9HLZLw1pG61sWIC1254/PrvhZquMA=
