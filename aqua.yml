@@ -2,7 +2,7 @@
 
 packages:
   - name: anchore/grype@v0.116.0
-  - name: anchore/syft@v1.48.0
+  - name: anchore/syft@v1.49.0
   - name: goodwithtech/dockle@v0.4.15
   - name: hadolint/hadolint@v2.14.0
   - name: koalaman/shellcheck@v0.11.0
@@ -13,7 +13,7 @@ packages:
   - name: wasilibs/go-yamllint@v1.38.0
 registries:
   - type: standard
-    ref: v4.539.0
+    ref: v4.541.0
 checksum:
   enabled: true
   require_checksum: true
