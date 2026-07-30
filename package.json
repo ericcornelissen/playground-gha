@@ -61,6 +61,7 @@
     "verify": "npm run check && npm run coverage"
   },
   "dependencies": {
+    "ip-address": "^10.2.0",
     "chalk": "^6.0.0",
     "semver": "^7.0.0"
   },
