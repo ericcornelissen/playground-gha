@@ -13,7 +13,7 @@ jobs:
   ghasum:
     name: Update gha.sum
     runs-on: ubuntu-24.04
-    if: ${{ github.event_name == 'push' && github.actor == 'dependabot[bot]' }}
+    if: github.event_name == 'push' && github.actor == 'dependabot[bot]'
     permissions:
       contents: write # To push a commit
     steps:
