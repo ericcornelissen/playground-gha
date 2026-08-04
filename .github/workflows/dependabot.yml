@@ -16,6 +16,7 @@ jobs:
     if: github.event_name == 'push' && github.actor == 'dependabot[bot]'
     permissions:
       contents: write # To push a commit
+      workflows: write # To push a change to gha.sum
     steps:
       - name: Verify action checksums
         uses: $/.github/actions/ghasum
