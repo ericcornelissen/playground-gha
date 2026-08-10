@@ -1,6 +1,14 @@
 name: Rekor log monitor
 on:
-  workflow_dispatch: ~
+  workflow_dispatch:
+    inputs:
+      which:
+        description: Which monitor
+        required: true
+        type: choice
+        options:
+          - new
+          - old
   schedule:
     - cron: '0 * * * *' # every hour
 
@@ -9,6 +17,7 @@ permissions: read-all
 jobs:
   run_consistency_proof_new:
     name: new
+    if: inputs.which == 'new'
     permissions:
       contents: read # Needed to checkout repositories
       issues: write # Needed if you set "file_issue: true"
@@ -18,6 +27,7 @@ jobs:
       artifact_retention_days: 14 # Optional, default is 14: Must be longer than the cron job frequency
   run_consistency_proof_old:
     name: old
+    if: inputs.which == 'old'
     permissions:
       contents: read # Needed to checkout repositories
       issues: write # Needed if you set "file_issue: true"
