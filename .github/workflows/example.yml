@@ -7,12 +7,22 @@ on:
 permissions: read-all
 
 jobs:
-  run_consistency_proof:
+  run_consistency_proof_new:
+    name: new
+    permissions:
+      contents: read # Needed to checkout repositories
+      issues: write # Needed if you set "file_issue: true"
+    uses: ericcornelissen/rekor-monitor/.github/workflows/reusable_monitoring.yml@7e1aa2b3f77c933ed003029a5f3f83c33cfe2c4e
+    with:
+      file_issue: true # Strongly recommended: Files an issue on monitoring failure
+      artifact_retention_days: 14 # Optional, default is 14: Must be longer than the cron job frequency
+  run_consistency_proof_old:
+    name: old
     permissions:
       contents: read # Needed to checkout repositories
       issues: write # Needed if you set "file_issue: true"
       id-token: write # Needed to detect the current reusable repository and ref
-    uses: ericcornelissen/rekor-monitor/.github/workflows/reusable_monitoring.yml@5315c18fb6011942ee2278cdfa7dc85fe7df82b5
+    uses: sigstore/rekor-monitor/.github/workflows/reusable_monitoring.yml@main
     with:
       file_issue: true # Strongly recommended: Files an issue on monitoring failure
       artifact_retention_days: 14 # Optional, default is 14: Must be longer than the cron job frequency
