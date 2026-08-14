@@ -22,7 +22,7 @@ jobs:
     permissions:
       contents: read # Needed to checkout repositories
       issues: write # Needed if you set "file_issue: true"
-    uses: ericcornelissen/rekor-monitor/.github/workflows/reusable_monitoring.yml@2548b40a93076d8ad58362f1c2b18faf5de86b81
+    uses: ericcornelissen/rekor-monitor/.github/workflows/reusable_monitoring.yml@af347a2bff40e7cd8b28d8cc41a8161b5eb4c5bf
     with:
       file_issue: true # Strongly recommended: Files an issue on monitoring failure
       artifact_retention_days: 14 # Optional, default is 14: Must be longer than the cron job frequency
