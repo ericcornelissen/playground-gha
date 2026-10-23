@@ -51,6 +51,7 @@ jobs:
           PACKAGE_DIR: ${{ runner.temp }}
         run: |
           npm run package
+          rm -rf *.md
           npm pack --pack-destination "${PACKAGE_DIR}"
       - name: Upload npm package
         if: steps.version.outputs.released == 'false'
