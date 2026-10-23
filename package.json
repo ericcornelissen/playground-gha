@@ -1,0 +1,148 @@
+{
+  "name": "shescape",
+  "version": "3.0.2",
+  "description": "simple shell escape library",
+  "homepage": "https://github.com/ericcornelissen/shescape#readme",
+  "license": "MPL-2.0",
+  "type": "module",
+  "exports": {
+    ".": {
+      "types": "./src/index.d.ts",
+      "default": "./src/index.js"
+    },
+    "./stateless": {
+      "types": "./src/stateless.d.ts",
+      "default": "./src/stateless.js"
+    },
+    "./testing": {
+      "types": "./src/testing.d.ts",
+      "default": "./src/testing.js"
+    }
+  },
+  "typings": "./src/index.d.ts",
+  "engines": {
+    "node": "^22.22.2 || ^24.15.0 || ^26"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/ericcornelissen/shescape.git"
+  },
+  "bugs": {
+    "url": "https://github.com/ericcornelissen/shescape/issues"
+  },
+  "author": {
+    "name": "Eric Cornelissen",
+    "email": "ericornelissen@gmail.com",
+    "url": "https://ericcornelissen.dev/"
+  },
+  "keywords": [
+    "shell",
+    "escape",
+    "injection"
+  ],
+  "dependencies": {
+    "which": "^7.0.0"
+  },
+  "peerDependencies": {
+    "@ericcornelissen/lregexp": "^1.0.9"
+  },
+  "peerDependenciesMeta": {
+    "@ericcornelissen/lregexp": {
+      "optional": true
+    }
+  },
+  "devDependencies": {
+    "@arethetypeswrong/cli": "0.18.3",
+    "@ericcornelissen/arbitrary-bash": "0.1.2",
+    "@ericcornelissen/eslint-plugin-top": "3.6.4",
+    "@ericcornelissen/lregexp": "1.0.9",
+    "@eslint/json": "2.1.1",
+    "@eslint/markdown": "8.0.2",
+    "@fast-check/ava": "3.0.1",
+    "@stryker-mutator/core": "10.0.0",
+    "@stryker-mutator/tap-runner": "10.0.0",
+    "ava": "8.1.0",
+    "better-npm-audit": "3.11.0",
+    "c8": "12.0.0",
+    "ci-info": "4.3.1",
+    "depreman": "0.4.0",
+    "eslint": "10.12.0",
+    "eslint-node-test": "1.0.1",
+    "eslint-plugin-ava": "18.0.0",
+    "eslint-plugin-depend": "1.5.0",
+    "eslint-plugin-jsdoc": "65.3.8",
+    "eslint-plugin-perfectionist": "5.10.0",
+    "eslint-plugin-regexp": "3.3.0",
+    "eslint-plugin-unicorn": "78.0.0",
+    "eslint-plugin-yml": "3.9.0",
+    "fast-check": "4.10.0",
+    "licensee": "12.0.2",
+    "lockfile-lint": "5.1.0",
+    "ls-engines": "0.10.1",
+    "npm-run-all2": "9.0.2",
+    "nve": "18.0.3",
+    "pp-test-kit": "0.5.3",
+    "prettier": "3.9.8",
+    "publint": "0.3.22",
+    "shescape-previous": "npm:shescape@3.0.1",
+    "sinon": "22.1.0",
+    "strip-directives": "2.2.3"
+  },
+  "scripts": {
+    "_eslint": "eslint --config config/eslint.js",
+    "_prettier": "prettier . --ignore-path .gitignore",
+    "audit": "npm-run-all audit:*",
+    "audit:deprecations": "depreman --errors-only --report-unused",
+    "audit:deprecations:runtime": "depreman --errors-only --omit=dev",
+    "audit:vulnerabilities": "better-npm-audit audit",
+    "audit:vulnerabilities:runtime": "better-npm-audit audit --production",
+    "check": "npm-run-all check:*",
+    "check:ci": "node script/maybe-run.js actionlint -config-file .github/actionlint.yml",
+    "check:config": "node script/check-eslint-rules.js",
+    "check:dependencies": "node script/check-runtime-deps.js",
+    "check:formatting": "npm run _prettier -- --check",
+    "check:js": "npm run _eslint -- \"**/*.{cjs,js}\"",
+    "check:json": "npm run _eslint -- \"**/*.json\"",
+    "check:licenses": "licensee --errors-only",
+    "check:lockfile": "lockfile-lint",
+    "check:manifest": "publint --strict && attw --pack --profile esm-only . && ls-engines",
+    "check:md": "npm-run-all check:md:*",
+    "check:md:code": "npm run _eslint -- \"**/*.md**\"",
+    "check:md:text": "npm run _eslint -- \"**/*.md\"",
+    "check:yml": "npm run _eslint -- \"**/*.yml\"",
+    "clean": "git clean --force -X .cache/ .temp/ _reports/",
+    "coverage": "npm-run-all coverage:*",
+    "coverage:unit": "c8 --config config/c8/unit.json npm run test:unit",
+    "coverage:integration": "node script/run-platform-coverage.js integration",
+    "coverage:integration:unix": "c8 --config config/c8/integration-unix.json npm run test:integration",
+    "coverage:integration:win": "c8 --config config/c8/integration-win.json npm run test:integration",
+    "coverage:e2e": "node script/run-platform-coverage.js e2e",
+    "coverage:e2e:unix": "c8 --config config/c8/e2e-unix.json npm run test:e2e",
+    "coverage:e2e:win": "c8 --config config/c8/e2e-win.json npm run test:e2e",
+    "coverage:compat": "npm-run-all coverage:compat:*",
+    "coverage:compat:runtime": "c8 --config config/c8/compat.json npm run test:compat:runtime",
+    "coverage:compat:regexp": "c8 --config config/c8/regexp.json npm run test:compat:regexp",
+    "coverage:breakage": "c8 --config config/c8/breakage.json npm run test:breakage",
+    "format": "npm run _prettier -- --write",
+    "fuzz": "node --env-file=.env script/fuzz.js",
+    "mutation": "npm-run-all mutation:*",
+    "mutation:unit": "stryker run config/stryker/unit.js",
+    "mutation:integration": "stryker run config/stryker/integration.js",
+    "package": "echo 'stub of npm run package'",
+    "test": "npm-run-all test:*",
+    "test:unit": "npm-run-all test:unit:*",
+    "test:unit:ava": "ava test/unit/{executables,fs,no-shell,options,platforms,reflection,unix,win}/*.test.js",
+    "test:unit:node": "node --test \"test/unit/compose/*.test.js\"",
+    "test:integration": "node --test \"test/integration/**/*.test.js\"",
+    "test:e2e": "node script/busybox-sh.js && node script/double-link-sh.js && node --test \"test/e2e/**/*.test.js\"",
+    "test:compat": "npm-run-all test:compat:*",
+    "test:compat:assumptions": "node test/compat/assumptions/runner.js",
+    "test:compat:assumptions:all": "nve 22.22.2,24.15.0,26.0.0 npm run test:compat:assumptions",
+    "test:compat:runtime": "node test/compat/runtime/runner.js",
+    "test:compat:runtime:all": "nve 22.22.2,24.15.0,26.0.0 npm run test:compat:runtime",
+    "test:compat:regexp": "node --enable-experimental-regexp-engine test/compat/regexp-engine/runner.js",
+    "test:compat:regexp:all": "nve 22.22.2,24.15.0,26.0.0 npm run test:compat:regexp",
+    "test:breakage": "node --test \"test/breakage/**/*.test.js\"",
+    "verify": "npm run check && npm run coverage"
+  }
+}
