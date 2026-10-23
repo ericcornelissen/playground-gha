@@ -1,0 +1,67 @@
+/**
+ * @overview Provides common utilities for end-to-end tests.
+ * @license MIT
+ */
+
+import process from "node:process";
+
+import { isCI } from "ci-info";
+import which from "which";
+
+import * as constants from "../_constants.js";
+
+/**
+ * Check whether the shell should be skipped.
+ *
+ * @param {string} shell The shell of interest.
+ * @returns {string | false} A skip reason or false.
+ */
+export function skip(shell) {
+  if (skipForUnix(shell) || skipForWindows(shell)) {
+    return `${shell} does not apply to the current platform`;
+  }
+
+  if (isCI || typeof shell !== "string") {
+    return false;
+  }
+
+  const PATH = process.env.PATH || process.env.Path;
+  try {
+    which.sync(shell, { path: PATH });
+    return false;
+  } catch {
+    return `${shell} not installed`;
+  }
+}
+
+/**
+ * Determine if an integration test may be skipped for a shell on Unix systems.
+ *
+ * @param {string} shell The name of the shell to test.
+ * @returns {boolean} `true` if it may be skipped, `false` otherwise.
+ */
+function skipForUnix(shell) {
+  if (constants.isWindows) {
+    return false;
+  }
+
+  if (constants.isMacOS && shell === constants.binBusyBox) {
+    return true;
+  }
+
+  return !constants.shellsUnix.includes(shell);
+}
+
+/**
+ * Determine if an integration test may be skipped for a shell on Windows.
+ *
+ * @param {string} shell The name of the shell to test.
+ * @returns {boolean} `true` if it may be skipped, `false` otherwise.
+ */
+function skipForWindows(shell) {
+  if (!constants.isWindows) {
+    return false;
+  }
+
+  return !constants.shellsWindows.includes(shell);
+}

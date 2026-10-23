@@ -1,0 +1,12 @@
+# Ignore file for npm (https://docs.npmjs.com/cli/using-npm/developers)
+
+/*
+
+## Allowlist
+!docs/
+!src/
+!CHANGELOG.md
+!package.json
+!LICENSE
+!README.md
+!SECURITY.md

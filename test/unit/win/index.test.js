@@ -1,0 +1,225 @@
+/**
+ * @overview Contains unit tests for the general Windows-specific functionality.
+ * @license MIT
+ */
+
+import path from "node:path/win32";
+
+import { testProp } from "@fast-check/ava";
+import test from "ava";
+import * as fc from "fast-check";
+import * as ppTestKit from "pp-test-kit/simulate";
+import * as sinon from "sinon";
+
+import * as nosh from "../../../src/internal/no-shell.js";
+import { noShell } from "../../../src/internal/options.js";
+import * as cmd from "../../../src/internal/win/cmd.js";
+import * as powershell from "../../../src/internal/win/powershell.js";
+import * as win from "../../../src/internal/win.js";
+
+import { arbitrary, constants, fixtures, macros } from "./_.js";
+
+const shells = [
+  { module: cmd, shellName: "cmd.exe" },
+  { module: powershell, shellName: "powershell.exe" },
+  { module: cmd, shellName: "cmd.EXE" },
+  { module: powershell, shellName: "powershell.EXE" },
+];
+
+testProp(
+  "the default shell when %COMSPEC% is defined",
+  [arbitrary.env(), arbitrary.windowsPath()],
+  (t, env, ComSpec) => {
+    env.ComSpec = ComSpec;
+
+    const result = win.getDefaultShell({ env });
+    t.is(result, ComSpec);
+  },
+);
+
+test("the default shell when %COMSPEC% is an empty string", (t) => {
+  const ComSpec = "";
+  const env = { ComSpec };
+
+  const result = win.getDefaultShell({ env });
+  t.is(result, ComSpec);
+});
+
+testProp(
+  "the default shell when %COMSPEC% is not defined",
+  [arbitrary.env()],
+  (t, env) => {
+    delete env.ComSpec;
+
+    const result = win.getDefaultShell({ env });
+    t.is(result, constants.binCmd);
+  },
+);
+
+testProp(
+  "the default shell when %COMSPEC% is polluted",
+  [arbitrary.env({ keys: ["ComSpec"] }), fc.string()],
+  (t, env, prototypeComSpec) => {
+    fc.pre(env.ComSpec !== prototypeComSpec);
+
+    env = ppTestKit.simulatePollution(env, {
+      property: "ComSpec",
+      value: prototypeComSpec,
+    });
+
+    const result = win.getDefaultShell({ env });
+    t.not(result, prototypeComSpec);
+  },
+);
+
+test("shell helper functions for no shell", (t) => {
+  const actual = win.getShellHelpers(noShell);
+  const expected = nosh;
+  t.is(actual, expected);
+});
+
+for (const { module, shellName } of shells) {
+  test(`shell helper functions for ${shellName}`, (t) => {
+    const actual = win.getShellHelpers(shellName);
+    const expected = module;
+    t.is(actual, expected);
+  });
+}
+
+testProp(
+  "shell helper functions for unsupported shell",
+  [arbitrary.unsupportedWindowsShell()],
+  (t, shellName) => {
+    const result = win.getShellHelpers(shellName);
+    t.is(result, undefined);
+  },
+);
+
+testProp(
+  "get shell name for supported shell",
+  [arbitrary.env(), arbitrary.windowsPath(), arbitrary.windowsShell()],
+  (t, env, basePath, shell) => {
+    const executable = shell.toLowerCase().endsWith(".exe")
+      ? shell
+      : `${shell}.exe`;
+
+    const resolveExecutable = sinon.stub();
+    resolveExecutable.returns(path.join(basePath, executable));
+
+    const result = win.getShellName({ env, shell }, { resolveExecutable });
+    t.is(result, executable);
+  },
+);
+
+testProp(
+  "get shell name for unsupported shell",
+  [
+    arbitrary.env(),
+    arbitrary.windowsPath(),
+    arbitrary.unsupportedWindowsShell(),
+  ],
+  (t, env, basePath, shell) => {
+    const resolveExecutable = sinon.stub();
+    resolveExecutable.returns(path.join(basePath, shell));
+
+    const result = win.getShellName({ env, shell }, { resolveExecutable });
+    t.is(result, shell);
+  },
+);
+
+testProp(
+  "resolving the shell",
+  [arbitrary.env(), fc.string()],
+  (t, env, shell) => {
+    const resolveExecutable = sinon.stub();
+    resolveExecutable.returns("foobar");
+
+    win.getShellName({ env, shell }, { resolveExecutable });
+    t.true(
+      resolveExecutable.calledWithExactly(
+        { env, executable: shell },
+        sinon.match({
+          dirname: path.dirname,
+          exists: sinon.match.func,
+          readlink: sinon.match.func,
+          resolve: path.resolve,
+          which: sinon.match.func,
+        }),
+      ),
+    );
+  },
+);
+
+test("is shell supported, no shell", (t) => {
+  const actual = win.isShellSupported(noShell);
+  t.true(actual);
+});
+
+for (const { shellName } of shells) {
+  test(`is shell supported, ${shellName}`, (t) => {
+    const actual = win.isShellSupported(shellName);
+    t.true(actual);
+  });
+}
+
+testProp(
+  "is shell supported for unsupported shell",
+  [arbitrary.unsupportedWindowsShell()],
+  (t, shellName) => {
+    const result = win.isShellSupported(shellName);
+    t.false(result);
+  },
+);
+
+testProp("flag protection function return type", [fc.string()], (t, arg) => {
+  const flagProtect = win.getFlagFunction();
+  const result = flagProtect(arg);
+  t.true(Array.isArray(result));
+  t.true(result.every((entry) => typeof entry === "string"));
+});
+
+testProp("flag protection function is stateless", [fc.string()], (t, arg) => {
+  const flagProtect = win.getFlagFunction();
+  const result1 = flagProtect(arg);
+  const result2 = flagProtect(arg);
+  t.deepEqual(result1, result2);
+});
+
+test("flag protection performance", macros.duration, {
+  arbitraries: [
+    fc.oneof(
+      fc.string({ size: "xlarge" }),
+      fc
+        .tuple(fc.string(), fc.string())
+        .map(([pre, post]) => `${pre}${"/".repeat(10e5)}${post}`),
+      fc
+        .tuple(fc.string(), fc.string())
+        .map(([pre, post]) => `${pre}${"-".repeat(10e5)}${post}`),
+    ),
+  ],
+  maxMillis: 50,
+  setup: win.getFlagFunction,
+});
+
+testProp(
+  "flag protection result",
+  [
+    fc.stringMatching(/^[-/]+$/),
+    fc.string().filter((value) => !/^[-/]/.test(value)),
+  ],
+  (t, prefix, value) => {
+    const flagFn = win.getFlagFunction();
+    const actual = flagFn(`${prefix}${value}`);
+    const expected = flagFn(value);
+    t.deepEqual(actual, ["", prefix, ...expected]);
+  },
+);
+
+const flagFixtures = Object.values(fixtures.flag.null).flat();
+for (const { input, expected } of flagFixtures) {
+  test(macros.flag, {
+    expected: expected.fragments,
+    input,
+    getFlagFunction: win.getFlagFunction,
+  });
+}

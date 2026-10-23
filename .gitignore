@@ -1,0 +1,21 @@
+# Ignore file for git (https://git-scm.com/docs/gitignore)
+
+.cache/
+.temp/
+_reports/
+.env
+checksums.txt
+
+## ESLint
+.eslintcache
+
+## IDEs
+.idea/
+.vscode/
+
+## Node.js
+node_modules/
+.npm/
+.node_repl_history
+npm-debug.log*
+shescape-*.tgz

@@ -1,0 +1,157 @@
+/**
+ * @overview Provides functionality for Unix systems.
+ * @license MPL-2.0
+ */
+
+import * as path from "node:path/posix";
+
+import which from "which";
+
+import * as fs from "./fs.js";
+import * as nosh from "./no-shell.js";
+import { noShell } from "./options.js";
+import RegExp from "./regexp.cjs";
+import * as bash from "./unix/bash.js";
+import * as busybox from "./unix/busybox.js";
+import * as csh from "./unix/csh.js";
+import * as dash from "./unix/dash.js";
+import * as zsh from "./unix/zsh.js";
+
+/**
+ * The name of the Bourne-again shell (Bash) binary.
+ *
+ * @constant
+ * @type {string}
+ */
+const binBash = "bash";
+
+/**
+ * The name of the BusyBox binary.
+ *
+ * @constant
+ * @type {string}
+ */
+const binBusyBox = "busybox";
+
+/**
+ * The name of the C shell (csh) binary.
+ *
+ * @constant
+ * @type {string}
+ */
+const binCsh = "csh";
+
+/**
+ * An alternative name for the C shell (csh) binary.
+ *
+ * @constant
+ * @type {string}
+ */
+const binCshBsd = "bsd-csh";
+
+/**
+ * The name of the Debian Almquist shell (Dash) binary.
+ *
+ * @constant
+ * @type {string}
+ */
+const binDash = "dash";
+
+/**
+ * The name of the Z shell (Zsh) binary.
+ *
+ * @constant
+ * @type {string}
+ */
+const binZsh = "zsh";
+
+/**
+ * Returns the default shell for Unix systems.
+ *
+ * For more information, see `options.shell` in:
+ * https://nodejs.org/api/child_process.html#child_processexeccommand-options-callback.
+ *
+ * @returns {string} The default shell.
+ */
+export function getDefaultShell() {
+  return "/bin/sh";
+}
+
+/**
+ * Returns a function to enable protection against flag injection for Unix
+ * systems.
+ *
+ * @returns {function(string): string[]} A function enabling flag protection.
+ */
+export function getFlagFunction() {
+  const splitter = new RegExp(/(-+)/);
+  return (arg) => arg.split(splitter);
+}
+
+/**
+ * Returns the helper functions to handle arguments for use with a particular
+ * shell.
+ *
+ * @param {string | symbol} shellName The identifier of a Unix shell.
+ * @returns {object} A set of functions to escape arguments.
+ */
+export function getShellHelpers(shellName) {
+  if (shellName === noShell) {
+    return nosh;
+  }
+
+  switch (shellName) {
+    case binBash: {
+      return bash;
+    }
+    case binBusyBox: {
+      return busybox;
+    }
+    case binCsh:
+    case binCshBsd: {
+      return csh;
+    }
+    case binDash: {
+      return dash;
+    }
+    case binZsh: {
+      return zsh;
+    }
+  }
+}
+
+/**
+ * Determines the name of the shell identified by a file path or file name.
+ *
+ * @param {object} args The arguments for this function.
+ * @param {Object<string, string>} args.env The environment variables.
+ * @param {string} args.shell The name or path of the shell.
+ * @param {object} deps The dependencies for this function.
+ * @param {function(): string} deps.resolveExecutable Resolve the path to an executable.
+ * @returns {string} The shell name.
+ */
+export function getShellName({ env, shell }, { resolveExecutable }) {
+  shell = resolveExecutable(
+    { env, executable: shell },
+    {
+      dirname: path.dirname,
+      exists: fs.existsSync,
+      readlink: fs.readlinkSync,
+      resolve: path.resolve,
+      which: which.sync,
+    },
+  );
+
+  const shellName = path.basename(shell);
+  return shellName;
+}
+
+/**
+ * Checks if the given shell is supported on Unix or not.
+ *
+ * @param {string} shellName The name of a Unix shell.
+ * @returns {boolean} `true` if the shell is supported, `false` otherwise.
+ */
+export function isShellSupported(shellName) {
+  return getShellHelpers(shellName) !== undefined;
+}
