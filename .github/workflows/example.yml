@@ -1,18 +1,76 @@
-name: Rekor log monitor
+name: Dependabot
 on:
-  workflow_dispatch: ~
-  schedule:
-    - cron: '0 * * * *' # every hour
+  pull_request:
+    branches:
+      - dependabot/github_actions/**
 
 permissions: read-all
 
 jobs:
-  run_consistency_proof:
+  gha-release:
+    name: GitHub Actions Release Immutability
+    runs-on: ubuntu-26.04
+    if: >-
+      github.event_name == 'pull_request' &&
+      startsWith(github.event.pull_request.head.ref, 'dependabot/github_actions/')
     permissions:
-      contents: read # Needed to checkout repositories
-      issues: write # Needed if you set "file_issue: true"
-      id-token: write # Needed to detect the current reusable repository and ref
-    uses: sigstore/rekor-monitor/.github/workflows/reusable_monitoring.yml@2cbcfa260c42a9b2f060c7769adb5d1c31a3b7c7
-    with:
-      file_issue: true # Strongly recommended: Files an issue on monitoring failure
-      artifact_retention_days: 14 # Optional, default is 14: Must be longer than the cron job frequency
+      pull-requests: write # To comment on a Pull Request
+    steps:
+      - name: Parse
+        id: parse
+        shell: bash
+        env:
+          TITLE: ${{ github.event.pull_request.title }}
+        run: |
+          REPO=$(echo "${TITLE}" | awk -F' ' '{print $2}')
+          OLD=$(echo "${TITLE}" | awk -F' ' '{print $4}')
+          NEW=$(echo "${TITLE}" | awk -F' ' '{print $6}')
+
+          {
+            echo "repo=${REPO}"
+            echo "new=${NEW}"
+            echo "old=${OLD}"
+          } >>"${GITHUB_OUTPUT}"
+      - name: Check
+        id: check
+        shell: bash
+        env:
+          GH_TOKEN: ${{ github.token }}
+          NEW: ${{ steps.parse.outputs.new }}
+          OLD: ${{ steps.parse.outputs.old }}
+          REPO: ${{ steps.parse.outputs.repo }}
+        run: |
+          set -euo pipefail
+
+          WAS_IMMUTABLE=$(gh release view "v${OLD}" --repo "${REPO}" --json isImmutable | jq .isImmutable)
+          IS_IMMUTABLE=$(gh release view "v${NEW}" --repo "${REPO}" --json isImmutable | jq .isImmutable)
+
+          echo "::debug::was ${WAS_IMMUTABLE}; is ${IS_IMMUTABLE}"
+          {
+          case "${WAS_IMMUTABLE};${IS_IMMUTABLE}" in
+          'true;true')
+            echo "comment="
+            ;;
+          'false;false')
+            echo "comment=${OLD} was not an immutable release and ${NEW} still is not. :neutral_face:"
+            ;;
+          'true;false')
+            echo "comment=${OLD} was an immutable release but ${NEW} is not. :cry:"
+            ;;
+          'false;true')
+            echo "comment=${OLD} was not an immutable release but ${NEW} is! :smile:"
+            ;;
+          esac
+          } >>"${GITHUB_OUTPUT}"
+      - name: Comment
+        if: steps.check.outputs.comment != ''
+        shell: bash
+        env:
+          GH_TOKEN: ${{ github.token }}
+          GH_URL: ${{ github.server_url }}
+          COMMENT: ${{ steps.check.outputs.comment }}
+          NUMBER: ${{ github.event.pull_request.number }}
+          REPO: ${{ github.repository }}
+        run: |
+          URL="${GH_URL}/${REPO}/pull/${NUMBER}"
+          gh pr comment "${URL}" --body "${COMMENT}"
